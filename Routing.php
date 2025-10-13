@@ -2,10 +2,15 @@
 
 class Routing{
 
-    public static function run(string $path){
+    public static function run(string $path, ?string $details){
         switch ($path) {
         case 'dashboard':
-            include "public/views/dashboard.html";
+            if ($details) {
+                $details = htmlspecialchars($details);
+                include "public/views/dashboard.php";
+            } else {
+                include "public/views/dashboard.html";
+            }
             break;
         case 'login':
             include "public/views/login.html";

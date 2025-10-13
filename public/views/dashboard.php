@@ -12,6 +12,7 @@
 
 <body>
     <h1>DASHBOARD</h1>
+    <p>Detale: <?= $details ?></p>
 </body>
 
 
