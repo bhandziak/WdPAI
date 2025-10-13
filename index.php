@@ -1,28 +1,13 @@
 <?php
 
-echo "<h1>Witaj student</h1>";
+// zadanie
+// 
 
-$host = 'db';
-$port = '5432';
-$dbname = 'db';
-$user = 'docker';
-$password = 'docker';
+require_once 'Routing.php';
 
-try {
-    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;";
-    $pdo = new PDO($dsn, $user, $password, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
+$path = trim($_SERVER['REQUEST_URI'], '/');
+$path = parse_url($path, PHP_URL_PATH);
 
-    $stmt = $pdo->query("SELECT * FROM students");
-
-    echo "<ul>";
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<li>{$row['id']}. {$row['name']} {$row['surname']}</li>";
-    }
-    echo "</ul>";
-
-} catch (PDOException $e) {
-}
+Routing::run($path)
 
 ?>
