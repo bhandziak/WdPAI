@@ -60,3 +60,9 @@ button:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(255, 102, 0, 0.4);
 }
+
+@media screen and (max-width: 480px){
+  form{
+    width: 100vw;
+  }
+}
