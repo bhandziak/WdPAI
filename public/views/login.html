@@ -11,13 +11,20 @@
 
 <body>
 
+
     <form method="POST" action="/login">
 
     <h1>LOGIN</h1>
 
-        <input type="text" id="email" name="email" placeholder="Podaj email" required>
+        <?php if(isset($messages)): ?>
+            <p class="messages">
+                <?= $messages; ?>
+            </p>
+        <?php endif; ?>
 
-        <input type="password" id="password" name="password" placeholder="Podaj hasło" required>
+        <input type="text" name="email" placeholder="Podaj email">
+
+        <input type="password" name="password" placeholder="Podaj hasło">
 
         <!-- type reset czyści formularz -->
         <!-- <button type="reset">Reset</button> -->

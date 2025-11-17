@@ -3,9 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/login.css" />
     <title>Document</title>
 </head>
 <body>
+    <form method="POST" action="/register">
+
     <h1>Register Page</h1>
+
+        <?php if(isset($messages)): ?>
+            <p class="messages">
+                <?= $messages; ?>
+            </p>
+        <?php endif; ?>
+
+        <input type="text" name="email" placeholder="Podaj email">
+
+        <input type="password" name="password" placeholder="Podaj hasło">
+        <input type="password" name="password2" placeholder="Powtórz hasło">
+
+        <input type="text" name="firstName" placeholder="Imie">
+        <input type="text" name="city" placeholder="Miasto">
+
+
+
+
+        <!-- type reset czyści formularz -->
+        <!-- <button type="reset">Reset</button> -->
+        <button type="submit">Login</button>
+    </form>
 </body>
 </html>
