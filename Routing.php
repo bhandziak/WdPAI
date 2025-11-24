@@ -2,6 +2,7 @@
 
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/DashboardController.php';
+require_once 'src/controllers/ErrorController.php';
 
 // TODO Controllery to singleton
 // TODO /dashboard/{$id}
@@ -23,6 +24,10 @@ public static $routes = [
     "dashboard" => [
         "controller" => "DashboardController",
         "action" => "index"
+    ],
+    "error" => [
+        "controller" => "ErrorController",
+        "action" => "error"
     ]
     ];
 
@@ -35,15 +40,12 @@ public static $routes = [
             case 'dashboard':
             case 'login':
             case 'register':
+            case 'error':
                 $controller = self::$routes[$route]['controller'];
                 $controllerObj = AppController::getInstance($controller);
                 $action = self::$routes[$route]['action'];
                 $controllerObj->$action($details);
                 break;
-            // case 'register':
-            //     $controller = new SecurityController();
-            //     $controller->register();
-            //     break;
             default:
                 include "public/views/404.html";
                 break;

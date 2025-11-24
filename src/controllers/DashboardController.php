@@ -1,11 +1,11 @@
 <?php
 
 require_once 'AppController.php';
+require_once __DIR__.'/../repository/UserRepository.php';
 
 class DashboardController extends AppController{
 
     public function index(?int $id = null){
-        // TODO wyświetli wszystkie projekty lub jeden konkretny
         $cards = [
             [
                 'id' => 1,
@@ -50,6 +50,12 @@ class DashboardController extends AppController{
 
         $result = !empty($filtered) ? $filtered : $cards;
 
-        return $this->render('dashboard', ['cards' => $result]);
+        // user repository
+        $userRepository = new UserRepository();
+        $users = $userRepository->getAllUsers();
+
+        var_dump($users);
+
+        return $this->render('dashboard', ['cards' => $result, 'users' => $users]);
     }
 }
