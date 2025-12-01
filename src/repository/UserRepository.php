@@ -16,24 +16,51 @@ class UserRepository extends Repository {
         return $users;
     }
 
-    // TODO implement add user method
-    public function addUser(
-        $username, $password, $email, $firstname, $lastname, $bio
-        ) : bool {
+    public function createUser(
+        string $email, string $hashedPassword,
+        string $firstName, string $lastName,
+        string $bio = ""
+    ){
         $query = $this->database->connect()->prepare(
-            'INSERT INTO users
-            (username, password, email, firstname, lastname, bio)
-            VALUES 
-            (:username, :password, :email, :firstname, :lastname, :bio)'
+            'INSERT INTO users (firstname, lastname, email, password, bio)
+             VALUES (?, ?, ?, ?, ?)'
         );
-        $query->bindParam(':username', $username);
-        $query->bindParam(':password', password_hash($password, PASSWORD_BCRYPT));
-        $query->bindParam(':email', $email);
-        $query->bindParam(':firstname', $firstname);
-        $query->bindParam(':lastname', $lastname);
-        $query->bindParam(':bio', $bio);
+
+        $query->execute([
+            $firstName,
+            $lastName,
+            $email,
+            $hashedPassword,
+            $bio
+        ]);
+
+        // $query = $this->database->connect()->prepare(
+        //     'INSERT INTO users (firstname, lastname, email, password, bio, enabled)
+        //      VALUES (:firstName, :lastName, :email, :password, :bio, TRUE)'
+        // );
+
+        // $query->bindParam(':firstName', $firstName);
+        // $query->bindParam(':lastName', $lastName);
+        // $query->bindParam(':email', $email);
+        // $query->bindParam(':password', $hashedPassword);
+        // $query->bindParam(':bio', $bio);
+
+        // $query->execute();
 
         $this->database->disconnect();
-        return $query->execute();
+    }
+
+    public function getUserByEmail(string $email){
+        $query = $this->database->connect()->prepare(
+            'SELECT * FROM users WHERE email = :email'
+        );
+
+        $query->bindParam(':email', $email);;
+        $query->execute();
+        
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+        $this->database->disconnect();
+        
+        return $user;
     }
 }
