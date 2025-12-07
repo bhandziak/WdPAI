@@ -10,26 +10,45 @@
 </head>
 
 <body>
+    <div class="main-login-layout">
+        <div class="login-panel">
+            <div class="login-content">
 
+                <div class="brand">
+                    <div class="brand-icon">🎵</div>
+                    <h1>TuneInQuiz</h1>
+                    <p>Test Your Music IQ</p>
+                </div>
 
-    <form method="POST" action="/login">
+                <div class="form-content">
+                    <div class="switcher">
+                        <div class="switcher-content">
+                            <a class="active" href="/login">Log In</a>
+                            <a href="/register">Register</a>
+                        </div>
 
-    <h1>LOGIN</h1>
+                    </div>
 
-        <?php if(isset($messages)): ?>
-            <p class="messages">
-                <?= $messages; ?>
-            </p>
-        <?php endif; ?>
+                    <form method="POST" action="/login">
+                        <label>Email</label>
+                        <input type="text" name="email" placeholder="Enter your email address">
 
-        <input type="text" name="email" placeholder="Podaj email">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter your password">
 
-        <input type="password" name="password" placeholder="Podaj hasło">
+                        <?php if(isset($messages)): ?>
+                        <p class="messages">
+                            <?= $messages; ?>
+                        </p>
+                        <?php endif; ?>
+                        <a class="forgot">Forgot Password?</a>
 
-        <!-- type reset czyści formularz -->
-        <!-- <button type="reset">Reset</button> -->
-        <button type="submit">Login</button>
-    </form>
+                        <button class="submit">Log In</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
 </body>
 
 </html>

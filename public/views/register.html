@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,66 @@
     <link rel="stylesheet" type="text/css" href="/public/styles/login.css" />
     <title>Document</title>
 </head>
+
 <body>
-    <form method="POST" action="/register">
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
+        <link rel="stylesheet" type="text/css" href="/public/styles/login.css" />
+        <title>LOGIN</title>
+    </head>
+
+    <body>
+        <div class="main-login-layout">
+            <div class="login-panel">
+                <div class="login-content">
+
+                    <div class="brand">
+                        <div class="brand-icon">🎵</div>
+                        <h1>TuneInQuiz</h1>
+                        <p>Test Your Music IQ</p>
+                    </div>
+
+                    <div class="form-content">
+                        <div class="switcher">
+                            <div class="switcher-content">
+                                <a href="/login">Log In</a>
+                                <a class="active" href="/register">Register</a>
+                            </div>
+
+                        </div>
+
+                        <form method="POST" action="/register">
+                            <label>Email</label>
+                            <input type="text" name="email" placeholder="Enter your email address">
+
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="Enter your password">
+
+                            <input type="password" name="password2" placeholder="Repeat your password">
+
+                            <?php if(isset($messages)): ?>
+                            <p class="messages">
+                                <?= $messages; ?>
+                            </p>
+                            <?php endif; ?>
+                            <a class="forgot">Forgot Password?</a>
+
+                            <button class="submit">Register</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+    </body>
+
+    </html>
+
+    <!-- <form method="POST" action="/register">
 
     <h1>Register Page</h1>
 
@@ -26,12 +85,8 @@
         <input type="text" name="firstName" placeholder="Imie">
         <input type="text" name="lastName" placeholder="Nazwisko">
 
-
-
-
-        <!-- type reset czyści formularz -->
-        <!-- <button type="reset">Reset</button> -->
         <button type="submit">Register</button>
-    </form>
+    </form> -->
 </body>
+
 </html>
