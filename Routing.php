@@ -28,19 +28,27 @@ public static $routes = [
     "error" => [
         "controller" => "ErrorController",
         "action" => "error"
-    ]
-    ];
+    ],
+    "search-cards" => [
+        "controller" => "DashboardController",
+        "action" => "search"
+    ]];
 
     public static function run(string $path){
+        // rozpoznawanie details w ścieżce
+        // po regule albo regexie
         $parts = explode('/', $path);
         $route = $parts[0];
         $details = $parts[1] ?? null;
 
+        // TODO IN_ARRAY in routes
+        // TODO session
         switch ($route) {
             case 'dashboard':
             case 'login':
             case 'register':
             case 'error':
+            case 'search-cards':
                 $controller = self::$routes[$route]['controller'];
                 $controllerObj = AppController::getInstance($controller);
                 $action = self::$routes[$route]['action'];
