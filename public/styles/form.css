@@ -1,0 +1,25 @@
+/* button */
+
+button {
+    background: #a54ef8;
+    border: none;
+    padding: 1em 1.5em;
+    color: #fff;
+    font-size: 1.1em;
+    border-radius: 3em;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.button:hover,
+.active:hover {
+    background-color: rgba(165, 78, 248, 0.8)
+}
+
+button:active {
+    filter: brightness(0.9);
+}

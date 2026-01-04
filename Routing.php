@@ -3,6 +3,7 @@
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/DashboardController.php';
 require_once 'src/controllers/ErrorController.php';
+require_once 'src/controllers/QuizController.php';
 
 // TODO Controllery to singleton
 // TODO /dashboard/{$id}
@@ -10,34 +11,36 @@ require_once 'src/controllers/ErrorController.php';
 
 // dopracowanie elementów takie jak w prototypie na podobnym poziomie
 
-class Routing{
+class Routing
+{
 
-public static $routes = [
-    "login" => [
-        "controller" => "SecurityController",
-        "action" => "login"
-    ],
-    "register" => [
-        "controller" => "SecurityController",
-        "action" => "register"
-    ],
-    "dashboard" => [
-        "controller" => "DashboardController",
-        "action" => "index"
-    ],
-    "error" => [
-        "controller" => "ErrorController",
-        "action" => "error"
-    ]
+    public static $routes = [
+        "login" => [
+            "controller" => "SecurityController",
+            "action" => "login"
+        ],
+        "register" => [
+            "controller" => "SecurityController",
+            "action" => "register"
+        ],
+        "home" => [
+            "controller" => "QuizController",
+            "action" => "index"
+        ],
+        "error" => [
+            "controller" => "ErrorController",
+            "action" => "error"
+        ]
     ];
 
-    public static function run(string $path){
+    public static function run(string $path)
+    {
         $parts = explode('/', $path);
         $route = $parts[0];
         $details = $parts[1] ?? null;
 
         switch ($route) {
-            case 'dashboard':
+            case 'home':
             case 'login':
             case 'register':
             case 'error':
@@ -51,5 +54,4 @@ public static $routes = [
                 break;
         }
     }
-
 }
