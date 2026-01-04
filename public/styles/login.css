@@ -161,3 +161,32 @@ button:active {
     text-align: center;
     font-weight: bold;
 }
+
+
+/* =========================
+   MOBILE (phones)
+   ========================= */
+@media (max-width: 768px) {
+
+    .main-login-layout {
+        justify-content: center;
+        align-items: center;
+        background-position: center;
+    }
+
+    .login-panel {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .login-content {
+        gap: 4em;
+        padding: 2em 1.5em;
+    }
+
+    .form-content {
+        width: 80vw;
+        max-width: 28em;
+    }
+}
