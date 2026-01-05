@@ -3,6 +3,7 @@
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/ErrorController.php';
 require_once 'src/controllers/QuizController.php';
+require_once 'src/controllers/QuizApiController.php';
 
 // TODO Controllery to singleton
 // TODO /dashboard/{$id}
@@ -40,23 +41,15 @@ class Routing
 
     public static function run(string $path)
     {
-        $parts = explode('/', $path);
-        $route = $parts[0];
-        $details = $parts[1] ?? null;
-
-        switch ($route) {
-            case 'home':
-            case 'login':
-            case 'register':
-            case 'error':
-                $controller = self::$routes[$route]['controller'];
-                $controllerObj = AppController::getInstance($controller);
-                $action = self::$routes[$route]['action'];
-                $controllerObj->$action($details);
-                break;
-            default:
-                include "public/views/404.html";
-                break;
+        if (!isset(self::$routes[$path])) {
+            include "public/views/404.html";
+            return;
         }
+
+        $controller = self::$routes[$path]['controller'];
+        $action = self::$routes[$path]['action'];
+
+        $controllerObj = AppController::getInstance($controller);
+        $controllerObj->$action();
     }
 }
