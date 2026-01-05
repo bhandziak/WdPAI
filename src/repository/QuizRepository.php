@@ -18,6 +18,7 @@ class QuizRepository extends Repository
             FROM quizzes q
             JOIN users u ON u.id = q.createdBy
             ORDER BY q.id DESC
+            LIMIT 10
         ");
 
         $stmt->execute();

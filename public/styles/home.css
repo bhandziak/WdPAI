@@ -5,7 +5,8 @@
 /* main */
 
 main {
-    height: 100vh;
+    min-height: 100vh;
+
     background-color: #221034;
 
     display: flex;
@@ -18,6 +19,8 @@ main {
     margin: 0 2em;
     background-color: rgba(36, 25, 51, 0.4);
 
+    display: flex;
+    flex-direction: column;
 }
 
 .search-wrapper {
@@ -30,4 +33,25 @@ main {
 
 .search-input {
     width: 35%;
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+    .home-content {
+        width: 100%;
+        margin: 0;
+    }
+
+    .search-wrapper {
+        flex-direction: column;
+        gap: 1em;
+        padding: 1em 0;
+        align-items: center;
+    }
+
+    .search-input {
+        width: 70%;
+        min-width: 200px;
+    }
 }
