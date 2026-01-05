@@ -47,7 +47,7 @@ class SecurityController extends AppController
         // cookie - jwt
 
         $url = "http://$_SERVER[HTTP_HOST]";
-        header("Location: {$url}/dashboard");
+        header("Location: {$url}/home");
     }
 
     // TODO rozwiniecie formularza register

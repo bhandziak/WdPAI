@@ -1,3 +1,5 @@
+@import "./form.css";
+
 .main-login-layout {
     height: 100vh;
     width: 100%;
@@ -102,25 +104,6 @@
     color: white;
 }
 
-/* --- FORM --- */
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2em;
-}
-
-label {
-    color: #fff;
-}
-
-input {
-    padding: 1em 1.5em;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 2em;
-    color: #fff;
-}
 
 input::placeholder {
     color: #ccc;

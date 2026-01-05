@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
     <link rel="stylesheet" type="text/css" href="/public/styles/home.css" />
-    <link rel="stylesheet" type="text/css" href="/public/styles/form.css" />
     <title>Document</title>
 </head>
 
@@ -14,7 +13,7 @@
     <header>
         <div class="logo-wrapper">
             <div class="brand-icon">🎵</div>
-            <div class="brand-text">TuneInQuiz</div>
+            <div class="main-text">TuneInQuiz</div>
         </div>
         <nav>
             <button>Log out</button>
@@ -30,6 +29,35 @@
 
     <main>
         <div class="home-content">
+            <div class="search-wrapper">
+                <div class="main-text">Discover Quizzes</div>
+                <input class="search-input" type="text" name="search" placeholder="Search for quizzes...">
+            </div>
+            <div class="quizzes-container">
+
+                <?php if (!empty($quizzes)): ?>
+                <?php foreach ($quizzes as $quiz): ?>
+                <div class="quiz-tile">
+                    <img class="quiz-tile-album-cover" src="<?= $quiz['albumcoverurl'] ?? '' ?>"
+                        alt="<?= $quiz['title'] ?>" />
+
+                    <div class="quiz-tile-title">
+                        <?= $quiz['title'] ?>
+                    </div>
+
+                    <div class="quiz-tile-subtitle">
+                        by
+                        <?= $quiz['createdbyusername'] ?? '' ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <div class="empty-state">
+                    No quizzes found
+                </div>
+                <?php endif; ?>
+
+            </div>
 
         </div>
     </main>

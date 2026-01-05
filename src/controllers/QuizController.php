@@ -2,13 +2,28 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
+require_once __DIR__ . './../repository/QuizRepository.php';
 
 class QuizController extends AppController
 {
 
-    public function index(?int $id = null)
-    {
+    private QuizRepository $quizRepository;
 
-        return $this->render('home', ['quizzes' => []]);
+    public function __construct()
+    {
+        $this->quizRepository = new QuizRepository();
+    }
+
+    public function index()
+    {
+        if (!$this->isGet()) {
+            return $this->render('error');
+        }
+
+        $quizzes = $this->quizRepository->getAllQuizzes();
+
+        return $this->render('home', [
+            'quizzes' => $quizzes ?? []
+        ]);
     }
 }

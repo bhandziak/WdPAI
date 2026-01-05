@@ -1,7 +1,6 @@
 <?php
 
 require_once 'src/controllers/SecurityController.php';
-require_once 'src/controllers/DashboardController.php';
 require_once 'src/controllers/ErrorController.php';
 require_once 'src/controllers/QuizController.php';
 
@@ -30,7 +29,13 @@ class Routing
         "error" => [
             "controller" => "ErrorController",
             "action" => "error"
-        ]
+        ],
+
+        // API
+        "api/quizzes" => [
+            "controller" => "QuizApiController",
+            "action" => "list"
+        ],
     ];
 
     public static function run(string $path)

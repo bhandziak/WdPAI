@@ -1,0 +1,41 @@
+/* wrapper */
+
+.quizzes-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3em;
+
+    justify-content: center;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.quiz-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    cursor: pointer;
+    margin: 2em;
+}
+
+.quiz-tile-album-cover {
+    width: 18em;
+    height: 18em;
+    border-radius: 1em;
+    object-fit: cover;
+    display: block;
+}
+
+/* tytuł */
+.quiz-tile-title {
+    font-size: 1.05em;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* podtytuł */
+.quiz-tile-subtitle {
+    font-size: 0.85em;
+    opacity: 0.7;
+}
