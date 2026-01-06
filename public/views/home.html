@@ -1,3 +1,8 @@
+<?php
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,13 +24,18 @@
             <div class="main-text">TuneInQuiz</div>
         </div>
         <nav>
-            <button>Log out</button>
+            <a class="logout-btn" href="/logout">Log out</a>
             <div class="user-wrapper">
                 <img class="user-picture" />
                 <div class="user-info">
-                    <div class="user-name">John Smith</div>
-                    <div class="user-role">User</div>
+                    <div class="user-name">
+                        <?= $_SESSION['username'] ?? 'Guest' ?>
+                    </div>
+                    <div class="user-role">
+                        <?= $_SESSION['role'] ?? '' ?>
+                    </div>
                 </div>
+
             </div>
         </nav>
     </header>

@@ -18,6 +18,10 @@ class Routing
             "controller" => "SecurityController",
             "action" => "login"
         ],
+        "logout" => [
+            "controller" => "SecurityController",
+            "action" => "logout"
+        ],
         "register" => [
             "controller" => "SecurityController",
             "action" => "register"

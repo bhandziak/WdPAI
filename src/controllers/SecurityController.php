@@ -42,16 +42,33 @@ class SecurityController extends AppController
             return $this->render('login', ['messages' => 'Wrong password']);
         }
 
-        // TODO
         // create user session
-        // cookie - jwt
+
+        session_start();
+        session_regenerate_id(true);
+
+        $_SESSION['user_id'] = $userRow['id'];
+        $_SESSION['username'] = $userRow['username'];
+        $_SESSION['role'] = $userRow['role'];
+        $_SESSION['logged_in'] = true;
 
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/home");
+        exit;
     }
 
-    // TODO rozwiniecie formularza register
-    // 
+    public function logout()
+    {
+        session_start();
+
+        session_unset();
+        session_destroy();
+
+        setcookie(session_name(), '', time() - 3600, '/');
+
+        header("Location: /login");
+        exit;
+    }
 
     // walidacje w osobnym serwisie
     public function register()
