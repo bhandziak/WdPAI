@@ -47,6 +47,13 @@ session_start();
                 <div>
                     <div class="main-text">Create Quiz</div>
                     <div class="description-text">Step 2 – add questions</div>
+                    <div class="description-text">
+                        Quiz named:
+                        <?= $_SESSION['quiz']['title'] ?>
+                    </div>
+                    <div class="description-text">Question number:
+                        <?= $_SESSION['quiz']['currentQuestionNumber'] ?? 'not set' ?>
+                    </div>
                 </div>
 
 

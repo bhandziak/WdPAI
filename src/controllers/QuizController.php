@@ -74,7 +74,8 @@ class QuizController extends AppController
         $_SESSION['quiz'] = [
             'title' => $title,
             'coverUrl' => $coverUrl,
-            'createdByUserId' => $_SESSION['user']['id'] ?? null
+            'createdByUserId' => $_SESSION['user']['id'] ?? null,
+            'currentQuestionNumber' => 1
         ];
 
         header('Location: /add_question');
@@ -153,7 +154,10 @@ class QuizController extends AppController
         }
         $_SESSION['quiz']['questions'][] = $question;
 
-        // 5. Save or next question
+        // 5. Save current question number
+        $_SESSION['quiz']['currentQuestionNumber'] = count($_SESSION['quiz']['questions']) + 1;
+
+        // 6. Save or next question
         if (isset($_POST['save'])) {
             header('Location: /save_quiz');
             exit();
