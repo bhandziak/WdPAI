@@ -4,7 +4,8 @@ require_once "config.php";
 require_once __DIR__ . '/src/controllers/AppController.php';
 
 // to nie jest kontroler bo nie nic nie wraca uzytkownikowi
-class Database {
+class Database
+{
     private $username;
     private $password;
     private $host;
@@ -25,11 +26,6 @@ class Database {
 
     private function __construct()
     {
-        // $this->username = USERNAME;
-        // $this->password = PASSWORD;
-        // $this->host = HOST;
-        // $this->database = DATABASE;
-
         $config = require __DIR__ . "/config.php";
 
         $this->host     = $config['db_host'];
@@ -42,7 +38,7 @@ class Database {
 
     public function connect()
     {
-        if($this->connection !== null) {
+        if ($this->connection !== null) {
             return $this->connection;
         }
 
@@ -57,8 +53,7 @@ class Database {
             // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
-        }
-        catch(PDOException $e) {
+        } catch (PDOException $e) {
             // TODO instead of die, redirect to an error page
             // die("Connection failed: " . $e->getMessage());
 

@@ -4,18 +4,26 @@
     right: 1.5em;
     width: 2.5em;
     height: 2.5em;
+
     padding: 0;
+
     border-radius: 50%;
     border: none;
+
     background-color: rgba(36, 25, 51, 1);
     color: rgba(255, 255, 255, 0.4);
+
     font-size: 2.5em;
     font-weight: bold;
+    text-decoration: none;
+
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
     display: flex;
     justify-content: center;
     align-items: center;
+
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     z-index: 1000;
 }
