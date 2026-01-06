@@ -36,6 +36,11 @@
     width: 90%;
 }
 
+.btn-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
 .nav-btn {
     display: flex;
     justify-content: center;

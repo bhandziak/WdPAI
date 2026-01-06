@@ -34,16 +34,16 @@ class QuizController extends AppController
 
     public function redirectToCreateQuizForm()
     {
-        return $this->render('createQuiz');
+        return $this->render('makeQuiz/createQuiz');
     }
 
     public function redirectToAddQuestionForm()
     {
-        return $this->render('addQuestion');
+        return $this->render('makeQuiz/addQuestion');
     }
 
     public function redirectToQuizCreatedSuccess()
     {
-        return $this->render('addQuestion');
+        return $this->render('makeQuiz/createQuizSuccess');
     }
 }
