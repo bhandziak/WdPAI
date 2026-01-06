@@ -62,7 +62,7 @@ session_start();
                     <label for="question">Question</label>
                     <input name="question" required>
                     <label for="cover">Upload mp3 file</label>
-                    <input class="upload-quiz-cover-input" type="file" name="cover" accept=".mp3,audio/mp3">
+                    <input class="upload-quiz-cover-input" type="file" name="cover" accept=".mp3,audio/mp3" required>
 
                     <br />
                     <label for="answers">Answers</label>
@@ -72,7 +72,7 @@ session_start();
                     <input name="ans_D" placeholder="Answer D">
 
                     <label for="correct">Correct answer</label>
-                    <select name="correct">
+                    <select name="correct" required>
                         <option value="">Select correct answer</option>
                         <option value="cor_A">A</option>
                         <option value="cor_B">B</option>
@@ -84,7 +84,7 @@ session_start();
 
                     <div class="btn-wrapper-outside">
                         <div class="btn-wrapper-inside">
-                            <a class="btn-link nav-btn" href="/home">Cancel</a>
+                            <a class="btn-link nav-btn" href="/cancel_creating_quiz">Cancel</a>
                             <button class="nav-btn" type="submit" name="next_question">Next question</button>
                         </div>
                         <div class="btn-wrapper-inside">

@@ -3,6 +3,7 @@
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/ErrorController.php';
 require_once 'src/controllers/QuizController.php';
+require_once 'src/controllers/QuizCreationController.php';
 
 // TODO Controllery to singleton
 // TODO /dashboard/{$id}
@@ -40,7 +41,7 @@ class Routing
             "action" => "redirectToCreateQuizForm"
         ],
         "create_quiz_start" => [
-            "controller" => "QuizController",
+            "controller" => "QuizCreationController",
             "action" => "createQuizStart"
         ],
 
@@ -50,13 +51,19 @@ class Routing
             "action" => "redirectToAddQuestionForm"
         ],
         "add_question_action" => [
-            "controller" => "QuizController",
+            "controller" => "QuizCreationController",
             "action" => "addQuestionToQuiz"
+        ],
+
+        // CANCEL QUIZ
+        "cancel_creating_quiz" => [
+            "controller" => "QuizCreationController",
+            "action" => "cancelCreatingQuiz"
         ],
 
         // SAVE QUIZ
         "save_quiz" => [
-            "controller" => "QuizController",
+            "controller" => "QuizCreationController",
             "action" => "saveQuiz"
         ],
 
