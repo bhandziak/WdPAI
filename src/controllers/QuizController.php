@@ -46,4 +46,27 @@ class QuizController extends AppController
     {
         return $this->render('makeQuiz/createQuizSuccess');
     }
+
+    public function getQuizDetails()
+    {
+        if (!isset($_GET['id'])) {
+            http_response_code(400);
+            echo 'Missing quiz id';
+            exit;
+        }
+
+        $quizId = (int)$_GET['id'];
+
+        $quiz = $this->quizRepository->getQuizContentById($quizId);
+
+        if (!$quiz) {
+            http_response_code(404);
+            echo 'Quiz not found';
+            exit;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($quiz);
+        exit;
+    }
 }

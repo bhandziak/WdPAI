@@ -71,6 +71,12 @@ class Routing
             "action" => "redirectToQuizCreatedSuccess"
         ],
 
+        // PLAY QUIZ
+        "quiz/details" => [
+            "controller" => "QuizController",
+            "action" => "getQuizDetails"
+        ],
+
         // ERROR
         "error" => [
             "controller" => "ErrorController",

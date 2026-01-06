@@ -75,4 +75,72 @@ class QuizRepository extends Repository
 
         return (int)$quizId;
     }
+
+    public function getQuizContentById(int $quizId): ?array
+    {
+        $conn = $this->database->connect();
+
+        $stmt = $conn->prepare("
+        SELECT
+            q.id            AS quiz_id,
+            q.title         AS quiz_title,
+            q.albumCoverUrl AS quiz_cover,
+
+            qs.id           AS question_id,
+            qs.text         AS question_text,
+            qs.audioUrl     AS question_audio,
+
+            a.id            AS answer_id,
+            a.text          AS answer_text,
+            a.isCorrect     AS answer_correct
+        FROM quizzes q
+        LEFT JOIN questions qs ON qs.quizId = q.id
+        LEFT JOIN answers a ON a.questionId = qs.id
+        WHERE q.id = :quizId
+        ORDER BY qs.id, a.id
+    ");
+
+        $stmt->execute([':quizId' => $quizId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($rows)) {
+            return null;
+        }
+
+        // 🧠 Mapowanie flat rows → struktura drzewa
+        $quiz = [
+            'id' => $rows[0]['quiz_id'],
+            'title' => $rows[0]['quiz_title'],
+            'albumCoverUrl' => $rows[0]['quiz_cover'],
+            'questions' => []
+        ];
+
+        $questionsMap = [];
+
+        foreach ($rows as $row) {
+            if ($row['question_id']) {
+
+                if (!isset($questionsMap[$row['question_id']])) {
+                    $questionsMap[$row['question_id']] = [
+                        'id' => $row['question_id'],
+                        'text' => $row['question_text'],
+                        'audioUrl' => $row['question_audio'],
+                        'answers' => []
+                    ];
+                }
+
+                if ($row['answer_id']) {
+                    $questionsMap[$row['question_id']]['answers'][] = [
+                        'id' => $row['answer_id'],
+                        'text' => $row['answer_text'],
+                        'isCorrect' => (bool)$row['answer_correct']
+                    ];
+                }
+            }
+        }
+
+        $quiz['questions'] = array_values($questionsMap);
+
+        return $quiz;
+    }
 }
