@@ -20,7 +20,13 @@ class QuizController extends AppController
             return $this->render('error');
         }
 
-        $quizzes = $this->quizRepository->getAllQuizzes();
+        $search = $_GET['search'] ?? null;
+
+        if ($search) {
+            $quizzes = $this->quizRepository->getQuizzesByText($search);
+        } else {
+            $quizzes = $this->quizRepository->getAllQuizzes();
+        }
 
         return $this->render('home', [
             'quizzes' => $quizzes ?? []

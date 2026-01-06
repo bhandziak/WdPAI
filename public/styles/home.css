@@ -2,6 +2,7 @@
 @import "./components/quizTile.css";
 @import "./components/header.css";
 @import "./components/fab.css";
+@import "./components/searchBar.css";
 
 /* main */
 
@@ -23,19 +24,6 @@ main {
     display: flex;
     flex-direction: column;
 }
-
-.search-wrapper {
-    padding: 2em 0;
-
-    display: flex;
-    justify-content: center;
-    gap: 4em;
-}
-
-.search-input {
-    width: 35%;
-}
-
 
 /* Mobile */
 @media (max-width: 768px) {

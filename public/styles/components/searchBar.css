@@ -1,0 +1,17 @@
+.search-wrapper {
+    padding: 2em 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 4em;
+}
+
+.search-input {
+    width: 70%;
+}
+
+
+.search-form {
+    display: flex;
+    flex-direction: row;
+}

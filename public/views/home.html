@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
     <link rel="stylesheet" type="text/css" href="/public/styles/home.css" />
-    <script src="/public/scripts/home/fetchQuizzesByText.js" defer></script>
     <script src="/public/scripts/home/toggleMenuBar.js" defer></script>
     <title>Document</title>
 </head>
@@ -35,7 +34,10 @@
         <div class="home-content">
             <div class="search-wrapper">
                 <div class="main-text">Discover Quizzes</div>
-                <input class="search-input" type="text" name="search" placeholder="Search for quizzes...">
+                <form class="search-form" method="GET" action="/home" autocomplete="off">
+                    <input class="search-input" type="text" name="search" placeholder="Search for quizzes...">
+                    <button class="submit">Search</button>
+                </form>
             </div>
             <div class="quizzes-container">
 
