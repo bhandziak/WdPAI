@@ -56,4 +56,23 @@ class QuizRepository extends Repository
 
         return $result ?: null;
     }
+
+    public function createQuiz(PDO $conn, array $quiz): int
+    {
+        $stmt = $conn->prepare("
+            INSERT INTO quizzes (title, albumCoverUrl, createdBy)
+            VALUES (:title, :coverUrl, :createdBy)
+            RETURNING id
+        ");
+
+        $stmt->execute([
+            ':title' => $quiz['title'],
+            ':coverUrl' => $quiz['coverUrl'],
+            ':createdBy' => $quiz['createdByUserId']
+        ]);
+
+        $quizId = $stmt->fetchColumn();
+
+        return (int)$quizId;
+    }
 }

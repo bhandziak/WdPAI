@@ -1,15 +1,15 @@
 <?php
 
 require_once 'AppController.php';
-require_once __DIR__ . './../repository/QuizRepository.php';
+require_once __DIR__ . './../services/QuizService.php';
 
 class QuizCreationController extends AppController
 {
-    private QuizRepository $quizRepository;
+    private QuizService $quizService;
 
     public function __construct()
     {
-        $this->quizRepository = new QuizRepository();
+        $this->quizService = new QuizService();
     }
 
     public function createQuizStart()
@@ -177,14 +177,30 @@ class QuizCreationController extends AppController
         session_start();
 
         if (!isset($_SESSION['quiz'])) {
-            header('Content-Type: application/json');
-            echo json_encode(['error' => 'No quiz data in session']);
+            return $this->render(
+                'error',
+                [
+                    'message' => 'Cann\'t save quiz. No quiz in session'
+                ]
+            );
             exit();
         }
 
-        $quizData = $_SESSION['quiz'];
-        header('Content-Type: application/json');
-        echo json_encode($quizData);
+        try {
+            $this->quizService->createQuiz($_SESSION['quiz']);
+
+            // clear cookie
+            unset($_SESSION['quiz']);
+
+            header('Location: /quiz_created_success');
+        } catch (Throwable $err) {
+            return $this->render(
+                'error',
+                [
+                    'message' => $err
+                ]
+            );
+        }
         exit();
     }
 }

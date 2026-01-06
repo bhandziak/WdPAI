@@ -54,7 +54,8 @@ session_start();
                 <?php if (!empty($quizzes)): ?>
                 <?php foreach ($quizzes as $quiz): ?>
                 <div class="quiz-tile">
-                    <img class="quiz-tile-album-cover" src="<?= $quiz['albumcoverurl'] ?? '' ?>"
+                    <img class="quiz-tile-album-cover"
+                        src="<?=  'http://localhost:8080/public' . $quiz['albumcoverurl'] ?>"
                         alt="<?= $quiz['title'] ?>" />
 
                     <div class="quiz-tile-title">

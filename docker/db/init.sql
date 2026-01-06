@@ -55,21 +55,21 @@ VALUES (
 INSERT INTO quizzes (title, albumCoverUrl, createdBy) VALUES
 (
     'Classic Rock Riffs',
-    'https://images.unsplash.com/photo-1511379938547-c1f69419868d',
+    '/uploads/albumCover/photo.png',
     1
 ),
 (
     'Jazz Essentials',
-    'https://images.unsplash.com/photo-1507838153414-b4b713384a76',
+    '/uploads/albumCover/photo.png',
     1
 ),
 (
     'Movie Soundtracks',
-    'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
+    '/uploads/albumCover/photo.png',
     1
 ),
 (
     '90s Pop Hits',
-    'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f',
+    '/uploads/albumCover/photo.png',
     1
 );

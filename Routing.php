@@ -66,7 +66,12 @@ class Routing
             "controller" => "QuizCreationController",
             "action" => "saveQuiz"
         ],
+        "quiz_created_success" => [
+            "controller" => "QuizController",
+            "action" => "redirectToQuizCreatedSuccess"
+        ],
 
+        // ERROR
         "error" => [
             "controller" => "ErrorController",
             "action" => "error"

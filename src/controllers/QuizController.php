@@ -41,4 +41,9 @@ class QuizController extends AppController
     {
         return $this->render('addQuestion');
     }
+
+    public function redirectToQuizCreatedSuccess()
+    {
+        return $this->render('addQuestion');
+    }
 }
