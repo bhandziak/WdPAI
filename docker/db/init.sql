@@ -19,6 +19,30 @@ CREATE TABLE quizzes (
         ON DELETE CASCADE
 );
 
+CREATE TABLE questions (
+    id SERIAL PRIMARY KEY,
+    quizId INT NOT NULL,
+    text VARCHAR(1000) NOT NULL,
+    audioUrl VARCHAR(500),
+
+    CONSTRAINT fk_question_quiz
+        FOREIGN KEY (quizId)
+        REFERENCES quizzes(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE answers (
+    id SERIAL PRIMARY KEY,
+    questionId INT NOT NULL,
+    text VARCHAR(1000) NOT NULL,
+    isCorrect BOOLEAN NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT fk_answer_question
+        FOREIGN KEY (questionId)
+        REFERENCES questions(id)
+        ON DELETE CASCADE
+);
+
 
 INSERT INTO users (username, passwordHash, role)
 VALUES (

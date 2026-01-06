@@ -21,10 +21,6 @@ class SecurityController extends AppController
             return $this->render('login');
         }
 
-        // TODO get data from login form
-        // check if user exists in database
-        // render dashboard view if success authentication
-
         $username = $_POST['username'] ?? "";
         $password = $_POST['password'] ?? "";
 
@@ -47,10 +43,8 @@ class SecurityController extends AppController
         session_start();
         session_regenerate_id(true);
 
-        $_SESSION['user_id'] = $userRow['id'];
-        $_SESSION['username'] = $userRow['username'];
-        $_SESSION['role'] = $userRow['role'];
-        $_SESSION['logged_in'] = true;
+        // TODO map user without password
+        $_SESSION['user'] = $userRow;
 
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/home");

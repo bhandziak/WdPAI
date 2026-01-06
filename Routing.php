@@ -31,9 +31,14 @@ class Routing
             "controller" => "QuizController",
             "action" => "index"
         ],
+
         "create_quiz" => [
             "controller" => "QuizController",
             "action" => "redirectToCreateQuizForm"
+        ],
+        "create_quiz_start" => [
+            "controller" => "QuizController",
+            "action" => "createQuizStart"
         ],
         "add_question" => [
             "controller" => "QuizController",

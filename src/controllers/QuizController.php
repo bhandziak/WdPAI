@@ -38,8 +38,57 @@ class QuizController extends AppController
         return $this->render('createQuiz');
     }
 
+    public function createQuizStart()
+    {
+        if (!$this->isPost()) {
+            return $this->render('error');
+        }
+
+        session_start();
+
+        // validations
+        $title = $_POST['title'] ?? null;
+        if (!$title) {
+            return $this->render('createQuiz', ['error' => 'Title is required']);
+        }
+
+        // album cover upload
+        $coverUrl = null;
+        if (isset($_FILES['cover']) && $_FILES['cover']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = __DIR__ . './../../public/uploads/albumCover/';
+
+            $tmpName = $_FILES['cover']['tmp_name'];
+            $extension = pathinfo($_FILES['cover']['name'], PATHINFO_EXTENSION);
+            $fileName = 'cover-' . time() . '.' . $extension;
+
+            $destination = $uploadDir . $fileName;
+
+            if (move_uploaded_file($tmpName, $destination)) {
+                $coverUrl = '/uploads/albumCover/' . $fileName;
+            } else {
+                return $this->render('createQuiz', ['error' => 'Failed to upload cover image']);
+            }
+        }
+
+        // save to session
+        $_SESSION['quiz'] = [
+            'title' => $title,
+            'coverUrl' => $coverUrl,
+            'createdByUserId' => $_SESSION['user']['id'] ?? null
+        ];
+
+        header('Location: /add_question');
+        exit();
+    }
+
     public function redirectToAddQuestionForm()
     {
-        return $this->render('addQuestion');
+        // return $this->render('addQuestion');
+
+        session_start();
+        $quizData = $_SESSION['quiz'];
+        header('Content-Type: application/json');
+        echo json_encode($quizData);
+        exit();
     }
 }

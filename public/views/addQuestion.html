@@ -30,10 +30,10 @@ session_start();
                 <img class="user-picture" />
                 <div class="user-info">
                     <div class="user-name">
-                        <?= $_SESSION['username'] ?? 'Guest' ?>
+                        <?= $_SESSION['user']['username'] ?? 'Guest' ?>
                     </div>
                     <div class="user-role">
-                        <?= $_SESSION['role'] ?? '' ?>
+                        <?= $_SESSION['user']['role'] ?? '' ?>
                     </div>
                 </div>
 
