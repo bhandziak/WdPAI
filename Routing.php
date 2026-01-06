@@ -14,6 +14,7 @@ class Routing
 {
 
     public static $routes = [
+        // AUTH
         "login" => [
             "controller" => "SecurityController",
             "action" => "login"
@@ -27,11 +28,13 @@ class Routing
             "action" => "register"
         ],
 
+        // GET QUIZZES
         "home" => [
             "controller" => "QuizController",
             "action" => "index"
         ],
 
+        // CREATE QUIZ
         "create_quiz" => [
             "controller" => "QuizController",
             "action" => "redirectToCreateQuizForm"
@@ -40,9 +43,21 @@ class Routing
             "controller" => "QuizController",
             "action" => "createQuizStart"
         ],
+
+        // ADD QUESTION
         "add_question" => [
             "controller" => "QuizController",
             "action" => "redirectToAddQuestionForm"
+        ],
+        "add_question_action" => [
+            "controller" => "QuizController",
+            "action" => "addQuestionToQuiz"
+        ],
+
+        // SAVE QUIZ
+        "save_quiz" => [
+            "controller" => "QuizController",
+            "action" => "saveQuiz"
         ],
 
         "error" => [

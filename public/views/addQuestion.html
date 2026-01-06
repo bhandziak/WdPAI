@@ -50,12 +50,12 @@ session_start();
                 </div>
 
 
-                <form method="POST" action="/add_question" class="quiz-form">
+                <form method="POST" action="/add_question_action" enctype="multipart/form-data" class="quiz-form">
 
                     <label for="question">Question</label>
                     <input name="question" required>
                     <label for="cover">Upload mp3 file</label>
-                    <input class="upload-quiz-cover-input" type="file" name="cover" accept="image/*">
+                    <input class="upload-quiz-cover-input" type="file" name="cover" accept=".mp3,audio/mp3">
 
                     <br />
                     <label for="answers">Answers</label>
@@ -78,10 +78,10 @@ session_start();
                     <div class="btn-wrapper-outside">
                         <div class="btn-wrapper-inside">
                             <a class="btn-link nav-btn" href="/home">Cancel</a>
-                            <button class="nav-btn" type="submit">Next question</button>
+                            <button class="nav-btn" type="submit" name="next_question">Next question</button>
                         </div>
                         <div class="btn-wrapper-inside">
-                            <button class="nav-btn" type="submit">Save Quiz</button>
+                            <button class="nav-btn" type="submit" name="save">Save Quiz</button>
                         </div>
                     </div>
 
