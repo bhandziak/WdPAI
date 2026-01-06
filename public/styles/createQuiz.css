@@ -1,0 +1,51 @@
+.home-content.center {
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 2em;
+}
+
+.form-content {
+    width: 80%;
+    max-width: 40em;
+    padding: 3em;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2em;
+}
+
+.description-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.btn-wrapper-outside {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+}
+
+.btn-wrapper-inside {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 90%;
+}
+
+.nav-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    padding: 0.5em 1em;
+    box-sizing: border-box;
+    height: 3em;
+}
+
+.upload-quiz-cover-input {
+    width: 50%;
+}

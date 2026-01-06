@@ -1,0 +1,79 @@
+<?php
+session_start();
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/home.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/createQuiz.css" />
+    <script src="/public/scripts/home/toggleMenuBar.js" defer></script>
+    <title>Create quiz</title>
+</head>
+
+<body>
+    <header>
+        <button class="menu-toggle">&#9776;</button>
+
+        <div class="logo-wrapper">
+            <div class="brand-icon">🎵</div>
+            <div class="main-text">TuneInQuiz</div>
+        </div>
+        <nav>
+            <a class="btn-link" href="/logout">Log out</a>
+            <div class="user-wrapper">
+                <img class="user-picture" />
+                <div class="user-info">
+                    <div class="user-name">
+                        <?= $_SESSION['username'] ?? 'Guest' ?>
+                    </div>
+                    <div class="user-role">
+                        <?= $_SESSION['role'] ?? '' ?>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="home-content center">
+            <div class="form-content">
+                <div>
+                    <div class="main-text">Create Quiz</div>
+                    <div class="description-text">Step 1 – basic quiz information</div>
+                </div>
+
+
+                <form method="POST" action="/create_quiz_start" class="quiz-form">
+
+                    <label for="title">Title</label>
+                    <input name="title" required placeholder="Enter quiz title">
+
+                    <label for="cover">Upload quiz cover</label>
+                    <input class="upload-quiz-cover-input" type="file" name="cover" accept="image/*">
+
+                    <br />
+
+                    <div class="btn-wrapper-outside">
+                        <div class="btn-wrapper-inside">
+                            <a class="btn-link nav-btn" href="/home">Go back</a>
+                            <button class="nav-btn" type="submit">Next</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+
+    </main>
+</body>
+
+</html>

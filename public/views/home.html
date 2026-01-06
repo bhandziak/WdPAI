@@ -12,7 +12,7 @@ session_start();
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
     <link rel="stylesheet" type="text/css" href="/public/styles/home.css" />
     <script src="/public/scripts/home/toggleMenuBar.js" defer></script>
-    <title>Document</title>
+    <title>Discover quizzes</title>
 </head>
 
 <body>
@@ -24,7 +24,7 @@ session_start();
             <div class="main-text">TuneInQuiz</div>
         </div>
         <nav>
-            <a class="logout-btn" href="/logout">Log out</a>
+            <a class="btn-link" href="/logout">Log out</a>
             <div class="user-wrapper">
                 <img class="user-picture" />
                 <div class="user-info">
@@ -46,7 +46,7 @@ session_start();
                 <div class="main-text">Discover Quizzes</div>
                 <form class="search-form" method="GET" action="/home" autocomplete="off">
                     <input class="search-input" type="text" name="search" placeholder="Search for quizzes...">
-                    <button class="submit">Search</button>
+                    <button type="submit">Search</button>
                 </form>
             </div>
             <div class="quizzes-container">
@@ -77,7 +77,7 @@ session_start();
 
         </div>
 
-        <a class="fab" href="/createquiz">+</a>
+        <a class="fab" href="/create_quiz">+</a>
 
 
     </main>

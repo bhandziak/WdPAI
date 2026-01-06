@@ -1,6 +1,9 @@
 /* button */
 
-button {
+button,
+a.btn-link {
+    text-decoration: none;
+
     background: #a54ef8;
     border: none;
     padding: 1em 1.5em;
@@ -15,12 +18,13 @@ button {
     text-align: center;
 }
 
-.button:hover,
-.active:hover {
-    background-color: rgba(165, 78, 248, 0.8)
+button:hover,
+a.btn-link:hover {
+    filter: brightness(1.1);
 }
 
-button:active {
+button:active,
+a.btn-link:active {
     filter: brightness(0.9);
 }
 
@@ -41,5 +45,38 @@ input {
     background: rgba(255, 255, 255, 0.1);
     border: none;
     border-radius: 2em;
+    color: #fff;
+}
+
+/* file input */
+
+input::-webkit-file-upload-button {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 2em;
+    background-color: #a54ef8;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+input::-webkit-file-upload-button:hover {
+    filter: brightness(1.1);
+}
+
+/* select */
+select {
+    padding: 0.6em 1em;
+    border-radius: 2em;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    cursor: pointer;
+    width: 50%;
+    font-size: 1em;
+}
+
+select option {
+    background-color: #221034;
     color: #fff;
 }

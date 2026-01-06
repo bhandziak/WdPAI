@@ -26,10 +26,20 @@ class Routing
             "controller" => "SecurityController",
             "action" => "register"
         ],
+
         "home" => [
             "controller" => "QuizController",
             "action" => "index"
         ],
+        "create_quiz" => [
+            "controller" => "QuizController",
+            "action" => "redirectToCreateQuizForm"
+        ],
+        "add_question" => [
+            "controller" => "QuizController",
+            "action" => "redirectToAddQuestionForm"
+        ],
+
         "error" => [
             "controller" => "ErrorController",
             "action" => "error"

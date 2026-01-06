@@ -32,4 +32,14 @@ class QuizController extends AppController
             'quizzes' => $quizzes ?? []
         ]);
     }
+
+    public function redirectToCreateQuizForm()
+    {
+        return $this->render('createQuiz');
+    }
+
+    public function redirectToAddQuestionForm()
+    {
+        return $this->render('addQuestion');
+    }
 }
