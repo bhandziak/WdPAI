@@ -47,6 +47,11 @@ class QuizController extends AppController
         return $this->render('makeQuiz/createQuizSuccess');
     }
 
+    public function playQuiz()
+    {
+        return $this->render('playQuiz/quizView');
+    }
+
     public function getQuizDetails()
     {
         if (!isset($_GET['id'])) {

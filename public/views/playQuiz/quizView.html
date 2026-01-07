@@ -1,0 +1,94 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/home.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/quiz/main.css" />
+    <script src="/public/scripts/home/toggleMenuBar.js" defer></script>
+    <title>Playing quiz</title>
+</head>
+
+<body>
+    <header>
+        <button class="menu-toggle">&#9776;</button>
+
+        <div class="logo-wrapper">
+            <div class="brand-icon">🎵</div>
+            <div class="main-text">TuneInQuiz</div>
+        </div>
+        <nav>
+            <a class="btn-link" href="/logout">Log out</a>
+            <div class="user-wrapper">
+                <img class="user-picture" />
+                <div class="user-info">
+                    <div class="user-name">
+                        <?= $_SESSION['user']['username'] ?? 'Guest' ?>
+                    </div>
+                    <div class="user-role">
+                        <?= $_SESSION['user']['role'] ?? '' ?>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="quiz-content">
+            <div class="quiz-header">
+                <div class="quiz-score">Score: <strong>1200</strong></div>
+                <div class="quiz-progress">
+                    <strong>Classic Rock Riffs</strong>
+                    <span>Question 5/10</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="quiz-card">
+                <div class="album-art"></div>
+
+                <div class="player-wrapper">
+                    <div class="player">
+                        <input type="range" min="0" max="30" value="15" />
+                    </div>
+                    <div class="player-time">
+                        <span class="time">0:17</span>
+                        <span class="time">0:30</span>
+                    </div>
+                </div>
+
+
+                <div class="timer">
+                    <div class="clock">⏱</div>
+                    <span>15</span>
+                </div>
+
+                <h2 class="question">What is the name of this track?</h2>
+
+                <div class="answers">
+                    <button class="answer">Bohemian Rhapsody</button>
+                    <button class="answer">Stairway to Heaven</button>
+                    <button class="answer correct">Hotel California</button>
+                    <button class="answer wrong">Smells Like Teen Spirit</button>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+</body>
+
+</html>

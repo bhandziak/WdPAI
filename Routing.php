@@ -76,6 +76,10 @@ class Routing
             "controller" => "QuizController",
             "action" => "getQuizDetails"
         ],
+        "play_quiz" => [
+            "controller" => "QuizController",
+            "action" => "playQuiz"
+        ],
 
         // ERROR
         "error" => [
