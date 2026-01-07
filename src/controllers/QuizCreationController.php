@@ -93,15 +93,12 @@ class QuizCreationController extends AppController
         }
 
         // 2b. Check if correct answer exits
-        $correctAnswerKey = substr($correctKey, 4);
 
-        if (!array_key_exists($correctAnswerKey, $answers)) {
+        if (!array_key_exists($correctKey, $answers)) {
             return $this->render('makeQuiz/addQuestion', [
                 'error' => 'The correct answer does not exist or is empty'
             ]);
         }
-
-        $correctAnswer = $answers[$correctAnswerKey];
 
         // 3. Audio file upload
         $audioUrl = null;
@@ -127,7 +124,7 @@ class QuizCreationController extends AppController
         foreach ($answers as $key => $text) {
             $question['answers'][] = [
                 'text' => $text,
-                'isCorrect' => ($key === $correctAnswer)
+                'isCorrect' => ($key === $correctKey)
             ];
         }
 
