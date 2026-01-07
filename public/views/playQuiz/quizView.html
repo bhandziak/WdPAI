@@ -14,7 +14,18 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
     <link rel="stylesheet" type="text/css" href="/public/styles/home.css" />
     <link rel="stylesheet" type="text/css" href="/public/styles/quiz/main.css" />
+
     <script src="/public/scripts/home/toggleMenuBar.js" defer></script>
+
+    <script src="/public/scripts/quiz/QuizConfig.js" defer></script>
+    <script src="/public/scripts/quiz/QuizApi.js" defer></script>
+    <script src="/public/scripts/quiz/QuizState.js" defer></script>
+    <script src="/public/scripts/quiz/QuizTimer.js" defer></script>
+    <script src="/public/scripts/quiz/AudioPlayer.js" defer></script>
+    <script src="/public/scripts/quiz/QuizUI.js" defer></script>
+    <script src="/public/scripts/quiz/QuizGame.js" defer></script>
+
+    <script src="/public/scripts/quiz/main.js" defer></script>
     <title>Playing quiz</title>
 </head>
 
@@ -45,13 +56,13 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <main>
         <div class="quiz-content">
-            <button class="quiz-close" aria-label="Zamknij quiz">✕</button>
+            <a class="quiz-close" href="/home">✕</a>
 
             <div class="quiz-header">
-                <div class="quiz-score">Score: <strong>1200</strong></div>
+                <div class="quiz-score">Score: <strong class="quiz-score-number">0</strong></div>
                 <div class="quiz-progress">
-                    <strong>Classic Rock Riffs</strong>
-                    <span>Question 5/10</span>
+                    <strong class="quiz-name">Classic Rock Riffs</strong>
+                    <span class="question-current-nr">Question</span>
                     <div class="progress-bar">
                         <div class="progress-fill"></div>
                     </div>
@@ -64,18 +75,18 @@ if (session_status() === PHP_SESSION_NONE) {
 
                 <div class="player-wrapper">
                     <div class="player">
-                        <input type="range" min="0" max="30" value="15" />
+                        <input class="audio-bar" type="range" min="0" max="30" value="15" />
                     </div>
                     <div class="player-time">
-                        <span class="time">0:17</span>
-                        <span class="time">0:30</span>
+                        <span class="time-start-text">0:17</span>
+                        <span class="time-end-text">0:30</span>
                     </div>
                 </div>
 
 
                 <div class="timer">
                     <div class="clock">⏱</div>
-                    <span>15</span>
+                    <span class="timer-text">15</span>
                 </div>
 
                 <h2 class="question">What is the name of this track?</h2>

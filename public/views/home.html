@@ -55,7 +55,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
                 <?php if (!empty($quizzes)): ?>
                 <?php foreach ($quizzes as $quiz): ?>
-                <a href="/quiz/details?id=<?= $quiz['id'] ?>" class="quiz-tile">
+                <a href="/play_quiz?id=<?= $quiz['id'] ?>" class="quiz-tile">
                     <img class="quiz-tile-album-cover"
                         src="<?=  'http://localhost:8080/public' . $quiz['albumcoverurl'] ?>"
                         alt="<?= $quiz['title'] ?>" />

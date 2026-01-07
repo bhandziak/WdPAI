@@ -72,7 +72,7 @@ class Routing
         ],
 
         // PLAY QUIZ
-        "quiz/details" => [
+        "api/quiz/details" => [
             "controller" => "QuizController",
             "action" => "getQuizDetails"
         ],
