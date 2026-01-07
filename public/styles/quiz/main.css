@@ -22,6 +22,7 @@ main {
 /* === PANEL === */
 
 .quiz-content {
+    position: relative;
     width: 80vw;
     max-width: 1000px;
     margin: 0 2em;
@@ -74,6 +75,26 @@ main {
 
 .quiz-score {
     font-size: 1.5em;
+}
+
+/* close button */
+.quiz-close {
+    position: absolute;
+    top: 0em;
+    left: 0;
+
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+
+    opacity: 0.8;
+}
+
+.quiz-close:hover {
+    opacity: 1;
 }
 
 /* === CARD === */
@@ -166,7 +187,7 @@ main {
     color: var(--white-90);
     background: rgba(255, 255, 255, 0.12);
     cursor: pointer;
-    transition: transform .15s, background .15s;
+    transition: transform .15s;
 }
 
 .answer:hover {
@@ -187,10 +208,16 @@ main {
 @media (max-width: 480px) {
 
     .quiz-content {
-        padding-top: 0.2em;
+        padding-top: 1em;
         width: 100%;
         margin: 0;
-        justify-content: center;
+        justify-content: flex-start;
+    }
+
+    @media (min-height: 800px) {
+        .quiz-content {
+            padding-top: 5em;
+        }
     }
 
     .quiz-header {
