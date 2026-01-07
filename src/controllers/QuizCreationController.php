@@ -23,7 +23,7 @@ class QuizCreationController extends AppController
         // validations
         $title = $_POST['title'] ?? null;
         if (!$title) {
-            return $this->render('createQuiz', ['error' => 'Title is required']);
+            return $this->render('makeQuiz/createQuiz', ['error' => 'Title is required']);
         }
 
         // album cover upload
@@ -40,7 +40,7 @@ class QuizCreationController extends AppController
             if (move_uploaded_file($tmpName, $destination)) {
                 $coverUrl = '/uploads/albumCover/' . $fileName;
             } else {
-                return $this->render('createQuiz', ['error' => 'Failed to upload cover image']);
+                return $this->render('makeQuiz/createQuiz', ['error' => 'Failed to upload cover image']);
             }
         }
 
@@ -71,7 +71,7 @@ class QuizCreationController extends AppController
         // 1. Fetch data form
         $questionText = $_POST['question'] ?? null;
         if (!$questionText) {
-            return $this->render('addQuestion', ['error' => 'Question text is required']);
+            return $this->render('makeQuiz/addQuestion', ['error' => 'Question text is required']);
         }
 
         $answers = [
@@ -85,10 +85,23 @@ class QuizCreationController extends AppController
         $answers = array_filter($answers, fn($ans) => !empty($ans));
 
         $correctKey = $_POST['correct'] ?? null;
-        $correctAnswer = null;
-        if ($correctKey) {
-            $correctAnswer = substr($correctKey, 4);
+
+        if (!$correctKey) {
+            return $this->render('makeQuiz/addQuestion', [
+                'error' => 'Correct answer is required'
+            ]);
         }
+
+        // 2b. Check if correct answer exits
+        $correctAnswerKey = substr($correctKey, 4);
+
+        if (!array_key_exists($correctAnswerKey, $answers)) {
+            return $this->render('makeQuiz/addQuestion', [
+                'error' => 'The correct answer does not exist or is empty'
+            ]);
+        }
+
+        $correctAnswer = $answers[$correctAnswerKey];
 
         // 3. Audio file upload
         $audioUrl = null;

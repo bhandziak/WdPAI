@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
 
@@ -59,6 +61,12 @@ session_start();
                     <input class="upload-quiz-cover-input" type="file" name="cover" accept="image/*">
 
                     <br />
+
+                    <?php if(isset($error)): ?>
+                    <p class="messages">
+                        <?= $error; ?>
+                    </p>
+                    <?php endif; ?>
 
                     <div class="btn-wrapper-outside">
                         <div class="btn-wrapper-inside">

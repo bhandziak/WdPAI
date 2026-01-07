@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
 
@@ -81,6 +83,12 @@ session_start();
                     </select>
 
                     <br />
+
+                    <?php if(isset($error)): ?>
+                    <p class="messages">
+                        <?= $error; ?>
+                    </p>
+                    <?php endif; ?>
 
                     <div class="btn-wrapper-outside">
                         <div class="btn-wrapper-inside">
