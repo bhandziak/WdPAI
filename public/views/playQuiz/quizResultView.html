@@ -1,0 +1,107 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/home.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/quiz/main.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/quiz/result.css" />
+
+    <script src="/public/scripts/home/toggleMenuBar.js" defer></script>
+    <title>Playing quiz</title>
+</head>
+
+<body>
+    <header>
+        <button class="menu-toggle">&#9776;</button>
+
+        <div class="logo-wrapper">
+            <div class="brand-icon">🎵</div>
+            <div class="main-text">TuneInQuiz</div>
+        </div>
+        <nav>
+            <a class="btn-link" href="/logout">Log out</a>
+            <div class="user-wrapper">
+                <img class="user-picture" />
+                <div class="user-info">
+                    <div class="user-name">
+                        <?= $_SESSION['user']['username'] ?? 'Guest' ?>
+                    </div>
+                    <div class="user-role">
+                        <?= $_SESSION['user']['role'] ?? '' ?>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="quiz-content quiz-result">
+
+            <a class="quiz-close" href="/home">✕</a>
+
+            <div class="quiz-header result-header">
+                <strong class="quiz-name">Quiz Results</strong>
+            </div>
+
+            <div class="result-card">
+
+                <div class="result-quiz-info">
+                    <div class="result-quiz-title">Classic Rock Riffs</div>
+                    <div class="result-quiz-image"></div>
+                </div>
+
+                <div class="result-score-circle">
+                    <div class="score-value">8<span>/10</span></div>
+                    <div class="score-percent">80%</div>
+                </div>
+
+                <div class="result-text-wrapper">
+                    <h2 class="result-title-text">Great Job!</h2>
+                    <p class="result-subtitle">
+                        You are a true Music Maestro!
+                    </p>
+                </div>
+
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <span class="stat-label">Correct Answers</span>
+                        <strong class="stat-value green">8</strong>
+                    </div>
+
+                    <div class="result-stat">
+                        <span class="stat-label">Incorrect Answers</span>
+                        <strong class="stat-value red">2</strong>
+                    </div>
+
+                    <div class="result-stat">
+                        <span class="stat-label">Time Taken</span>
+                        <strong class="stat-value">02:45</strong>
+                    </div>
+                </div>
+
+                <button class="result-action primary">
+                    Play Again
+                </button>
+
+                <a href="/home" class="result-action secondary">
+                    Return Home
+                </a>
+
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>
