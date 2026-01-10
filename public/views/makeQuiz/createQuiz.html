@@ -37,6 +37,10 @@ if (session_status() === PHP_SESSION_NONE) {
                     <div class="user-role">
                         <?= $_SESSION['user']['role'] ?? '' ?>
                     </div>
+                    <div class="user-datails">
+                        score :
+                        <?= $_SESSION['user']['total_score'] ?? '0' ?>
+                    </div>
                 </div>
 
             </div>
