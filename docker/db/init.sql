@@ -7,6 +7,17 @@ CREATE TABLE users (
     role user_role NOT NULL DEFAULT 'user'
 );
 
+CREATE TABLE user_details (
+    user_id INT PRIMARY KEY,
+    email VARCHAR(255),
+    favoriteGenre VARCHAR(50),
+
+    CONSTRAINT fk_user_details_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE quizzes (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -44,32 +55,65 @@ CREATE TABLE answers (
 );
 
 
-INSERT INTO users (username, passwordHash, role)
-VALUES (
+-- FUNCTIONS
+
+CREATE OR REPLACE FUNCTION create_user(
+    p_username VARCHAR,
+    p_password_hash VARCHAR,
+    p_role user_role DEFAULT 'user',
+    p_email VARCHAR DEFAULT NULL,
+    p_favorite_genre VARCHAR DEFAULT NULL
+)
+RETURNS INT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_user_id INT;
+BEGIN
+    INSERT INTO users (username, passwordHash, role)
+    VALUES (p_username, p_password_hash, p_role)
+    RETURNING id INTO v_user_id;
+
+    INSERT INTO user_details (user_id, email, favoriteGenre)
+    VALUES (v_user_id, p_email, p_favorite_genre);
+
+    RETURN v_user_id;
+END;
+$$;
+
+
+-- DUMMY DATA
+
+SELECT create_user(
     'admin',
     '$2a$12$9mWIpC1avGSNX7gtgA7EyeVpFTUAJ90Zng6A9yIEG9F1iPlwW6uK.',
-    'admin'
+    'admin',
+    'admin@quizmusic.local',
+    'rock'
 );
 
 
 INSERT INTO quizzes (title, albumCoverUrl, createdBy) VALUES
 (
     'Classic Rock Riffs',
-    '/uploads/albumCover/photo.png',
+    '/uploads/albumCover/photo.jpg',
     1
 ),
 (
     'Jazz Essentials',
-    '/uploads/albumCover/photo.png',
+    '/uploads/albumCover/photo.jpg',
     1
 ),
 (
     'Movie Soundtracks',
-    '/uploads/albumCover/photo.png',
+    NULL,
     1
 ),
 (
     '90s Pop Hits',
-    '/uploads/albumCover/photo.png',
+    '/uploads/albumCover/photo.jpg',
     1
 );
+
+
+

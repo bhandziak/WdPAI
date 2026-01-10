@@ -74,9 +74,11 @@ class SecurityController extends AppController
         $username = $_POST['username'] ?? "";
         $password = $_POST['password'] ?? "";
         $password2 = $_POST['password2'] ?? "";
+        $email = $_POST['email'] ?? null;
+        $favoriteGenre = $_POST['favoriteGenre'] ?? null;
 
         if (empty($username) || empty($password) || empty($password2)) {
-            return $this->render('register', ['messages' => 'Fill all fields']);
+            return $this->render('register', ['messages' => 'Fill all required fields']);
         }
 
         if ($password !== $password2) {
@@ -89,13 +91,24 @@ class SecurityController extends AppController
             return $this->render('register', ['messages' => 'Username is already taken']);
         }
 
+        // validate email
+        if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->render('register', ['messages' => 'Invalid email address']);
+        }
+
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
 
-        $this->userRepository->createUser(
-            $username,
-            $hashedPassword
-        );
+        try {
+            $this->userRepository->createUser(
+                $username,
+                $hashedPassword,
+                $email,
+                $favoriteGenre
+            );
+        } catch (\Exception $e) {
+            return $this->render('register', ['messages' => 'Something went wrong. Please try again.']);
+        }
 
         return $this->render('login', ['messages' => 'User registered successfully. Please login.']);
     }

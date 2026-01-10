@@ -20,16 +20,23 @@ class UserRepository extends Repository
 
     public function createUser(
         string $username,
-        string $hashedPassword
+        string $hashedPassword,
+        ?string $email = null,
+        ?string $favoriteGenre = null,
+        string $role = 'user'
     ) {
-        $query = $this->database->connect()->prepare(
-            'INSERT INTO users (username, passwordhash)
-             VALUES (?, ?)'
+        $conn = $this->database->connect();
+
+        $query = $conn->prepare(
+            'SELECT create_user(:username, :passwordHash, :role, :email, :favoriteGenre)'
         );
 
         $query->execute([
-            $username,
-            $hashedPassword
+            ':username'       => $username,
+            ':passwordHash'   => $hashedPassword,
+            ':role'           => $role,
+            ':email'          => $email,
+            ':favoriteGenre'  => $favoriteGenre
         ]);
 
         $this->database->disconnect();
