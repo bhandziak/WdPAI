@@ -57,7 +57,10 @@ CREATE TABLE answers (
 CREATE TABLE quiz_results (
     user_id INT NOT NULL,
     quiz_id INT NOT NULL,
-    score INT DEFAULT 0,
+    score INT DEFAULT 0 CHECK (score >= 0),
+    correct_answers INT NULL CHECK (correct_answers >= 0),
+    incorrect_answers INT NULL CHECK (incorrect_answers >= 0),
+    taken_time INT NULL CHECK (taken_time >= 0),
     played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (user_id, quiz_id),
@@ -146,6 +149,32 @@ SELECT
 FROM quizzes q
 JOIN users u ON u.id = q.createdBy
 ORDER BY q.id DESC;
+
+-- TRIGGERS
+
+CREATE OR REPLACE FUNCTION check_quiz_result()
+RETURNS TRIGGER AS $$
+DECLARE
+    number_of_questions INT;
+BEGIN
+    SELECT COUNT(*) INTO number_of_questions
+    FROM questions
+    WHERE quizId = NEW.quiz_id;
+
+    IF (NEW.correct_answers + NEW.incorrect_answers) != number_of_questions THEN
+        RAISE EXCEPTION 'The sum of correct answers and incorrect answers (% + %) does not match the number of questions in the quiz (%)',
+            NEW.correct_answers, NEW.incorrect_answers, number_of_questions;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_check_quiz_result
+BEFORE INSERT OR UPDATE ON quiz_results
+FOR EACH ROW
+EXECUTE FUNCTION check_quiz_result();
+
 
 -- DUMMY DATA
 
