@@ -2,6 +2,18 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+$quizId = $data['quizId'];
+$quizName = $data['quizName'];
+$albumCoverUrl = $data['albumCoverUrl'];
+$score = $data['score'];
+$totalTime = $data['totalTime'];
+$correctAnswers = $data['correctAnswers'];
+$incorrectAnswers = $data['incorrectAnswers'];
+$allAnswers = $correctAnswers +  $incorrectAnswers;
+
+$minutes = intdiv($totalTime, 60);
+$seconds = $totalTime % 60;
 ?>
 
 
@@ -57,13 +69,27 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="result-card">
 
                 <div class="result-quiz-info">
-                    <div class="result-quiz-title">Classic Rock Riffs</div>
-                    <div class="result-quiz-image"></div>
+                    <div class="result-quiz-title">
+                        <?= $quizName ?? "" ?>
+                    </div>
+                    <img class="result-quiz-image" src="
+                        <?php if (!empty($albumCoverUrl)): ?>
+                            <?=  'http://localhost:8080/public' . $albumCoverUrl?>
+                        <?php else: ?>
+                            <?=  'http://localhost:8080/public/images/cover/default.png'?>
+                        <?php endif; ?>" />
                 </div>
 
                 <div class="result-score-circle">
-                    <div class="score-value">8<span>/10</span></div>
-                    <div class="score-percent">80%</div>
+                    <div class="score-value">
+                        <?= $score ?? "" ?>
+                    </div>
+                    <div class="score-percent">
+                        <?= $allAnswers > 0 
+                            ? (int)(($correctAnswers / $allAnswers) * 100) 
+                            : 0 ?>
+                        %
+                    </div>
                 </div>
 
                 <div class="result-text-wrapper">
@@ -76,23 +102,29 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div class="result-stats">
                     <div class="result-stat">
                         <span class="stat-label">Correct Answers</span>
-                        <strong class="stat-value green">8</strong>
+                        <strong class="stat-value green">
+                            <?= $correctAnswers ?? "" ?>
+                        </strong>
                     </div>
 
                     <div class="result-stat">
                         <span class="stat-label">Incorrect Answers</span>
-                        <strong class="stat-value red">2</strong>
+                        <strong class="stat-value red">
+                            <?= $incorrectAnswers ?? "" ?>
+                        </strong>
                     </div>
 
                     <div class="result-stat">
                         <span class="stat-label">Time Taken</span>
-                        <strong class="stat-value">02:45</strong>
+                        <strong class="stat-value">
+                            <?= sprintf('%02d:%02d', $minutes, $seconds) ?>
+                        </strong>
                     </div>
                 </div>
 
-                <button class="result-action primary">
+                <a href="<?= '/play_quiz?id=' . $quizId ?>" class="result-action primary">
                     Play Again
-                </button>
+                </a>
 
                 <a href="/home" class="result-action secondary">
                     Return Home

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // get quizId
     const quizId = new URLSearchParams(window.location.search).get('id');
+
     if (!quizId) {
         alert("Bad URL");
         window.location.href = '/home';
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const timer = new QuizTimer();
     const state = new QuizState();
 
-    const game = new QuizGame(api, ui, audio, timer, state);
+    const game = new QuizGame(api, ui, audio, timer, state, quizId);
 
-    game.start(quizId);
+    game.start();
 });

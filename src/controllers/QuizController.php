@@ -52,9 +52,31 @@ class QuizController extends AppController
         return $this->render('playQuiz/quizView');
     }
 
-    public function redirectToQuizResultView()
+    public function finishQuiz()
     {
-        return $this->render('playQuiz/quizResultView');
+        // get data
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $quizId = $data['quizId'] ?? 0;
+        $score = $data['score'] ?? 0;
+        $totalTime = $data['totalTime'] ?? 0;
+        $correctAnswers = $data['correctAnswers'] ?? 0;
+        $incorrectAnswers = $data['incorrectAnswers'] ?? 0;
+
+        // save to db
+
+        // render
+        return $this->render('playQuiz/quizResultView', [
+            'data' => [
+                'quizId' => $quizId,
+                'quizName' => "name",
+                'albumCoverUrl' => null,
+                'score' => $score,
+                'totalTime' => $totalTime,
+                'correctAnswers' => $correctAnswers,
+                'incorrectAnswers' => $incorrectAnswers
+            ]
+        ]);
     }
 
     public function getQuizDetails()

@@ -79,7 +79,7 @@ class QuizUI {
     }
 
     highlightAnswers(correctIndex, clickedIndex = -1) {
-        console.log("highlightAnswers - correctIndex", correctIndex);
+        // console.log("highlightAnswers - correctIndex", correctIndex);
 
         [...this.#answersEl.children].forEach((btn, index) => {
             btn.disabled = true;

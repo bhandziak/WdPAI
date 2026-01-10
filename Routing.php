@@ -80,9 +80,9 @@ class Routing
             "controller" => "QuizController",
             "action" => "playQuiz"
         ],
-        "quiz_result" => [
+        "api/quiz/finish" => [
             "controller" => "QuizController",
-            "action" => "redirectToQuizResultView"
+            "action" => "finishQuiz"
         ],
 
         // ERROR

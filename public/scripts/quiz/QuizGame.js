@@ -1,14 +1,16 @@
 class QuizGame {
-    constructor(api, ui, audio, timer, state) {
+    constructor(api, ui, audio, timer, state, quizId) {
         this.api = api;
         this.ui = ui;
         this.audio = audio;
         this.timer = timer;
         this.state = state;
         this.quiz = null;
+        this.quizId = quizId;
     }
 
-    async start(quizId) {
+    async start() {
+        const quizId = this.quizId;
         this.quiz = await this.api.getQuizById(quizId);
 
         this.setUpUI();
@@ -57,7 +59,10 @@ class QuizGame {
         // timer 
         this.timer.start(
             QuizConfig.TIME_LIMIT,
-            timeLeft => this.ui.updateTimer(timeLeft, QuizConfig.TIME_LIMIT),
+            timeLeft => {
+                this.state.addSecondToTime();
+                this.ui.updateTimer(timeLeft, QuizConfig.TIME_LIMIT);
+            },
             () => this.handleAnswer(false, question)
         );
     }
@@ -73,7 +78,10 @@ class QuizGame {
         // add score
         if (isCorrect) {
             this.state.addScore(timeLeft);
+            this.state.addCorrectAnswer();
             this.ui.updateScore(this.state.score);
+        } else {
+            this.state.addIncorrectAnswer();
         }
 
         // highlight btns
@@ -86,8 +94,28 @@ class QuizGame {
         }, QuizConfig.ANSWER_DELAY);
     }
 
-    endQuiz() {
+    async endQuiz() {
         this.audio.stop();
-        console.log("Score: " + this.state.score);
+
+        const score = this.state.score;
+        const totalTime = this.state.takenTime;
+        const correctAnswers = this.state.correctAnswers;
+        const incorrectAnswers = this.state.incorrectAnswers;
+        const quizId = this.quizId;
+
+        const dto = {
+            quizId,
+            score,
+            totalTime,
+            correctAnswers,
+            incorrectAnswers
+        }
+
+        try {
+            const quizResultHtml = await this.api.quizFinish(dto);
+            document.documentElement.innerHTML = quizResultHtml;
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
