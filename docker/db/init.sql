@@ -54,6 +54,26 @@ CREATE TABLE answers (
         ON DELETE CASCADE
 );
 
+CREATE TABLE quiz_results (
+    user_id INT NOT NULL,
+    quiz_id INT NOT NULL,
+    score INT DEFAULT 0,
+    played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (user_id, quiz_id),
+
+    CONSTRAINT fk_quiz_results_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_quiz_results_quiz
+        FOREIGN KEY (quiz_id)
+        REFERENCES quizzes(id)
+        ON DELETE CASCADE
+);
+
+
 
 -- FUNCTIONS
 
@@ -80,6 +100,25 @@ BEGIN
     RETURN v_user_id;
 END;
 $$;
+
+-- VIEWS
+
+CREATE OR REPLACE VIEW user_data AS
+SELECT
+    u.id AS user_id,
+    u.username,
+    u.role,
+    ud.email,
+    ud.favoriteGenre,
+    COALESCE(SUM(qr.score), 0) AS total_score
+FROM users u
+LEFT JOIN user_details ud
+    ON u.id = ud.user_id
+LEFT JOIN quiz_results qr
+    ON u.id = qr.user_id
+GROUP BY u.id, u.username, u.role ,ud.email, ud.favoriteGenre
+ORDER BY total_score DESC;
+
 
 
 -- DUMMY DATA

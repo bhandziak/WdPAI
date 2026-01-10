@@ -5,11 +5,11 @@ require_once 'Repository.php';
 class UserRepository extends Repository
 {
 
-    public function getAllUsers(): ?array
+    public function getAllUsersDetails(): ?array
     {
-        $query = $this->database->connect()->prepare(
-            'SELECT * FROM users'
-        );
+        $conn = $this->database->connect();
+
+        $query = $conn->prepare('SELECT * FROM user_data ORDER BY total_score DESC');
         $query->execute();
 
         $users = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -42,13 +42,26 @@ class UserRepository extends Repository
         $this->database->disconnect();
     }
 
+    public function getUserDetailsByName(string $username)
+    {
+        $conn = $this->database->connect();
+
+        $query = $conn->prepare('SELECT * FROM user_data WHERE username = :username');
+        $query->bindParam(':username', $username);
+        $query->execute();
+
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+        $this->database->disconnect();
+
+        return $user;
+    }
+
     public function getUserByName(string $username)
     {
-        $query = $this->database->connect()->prepare(
-            'SELECT * FROM users WHERE username = :username'
-        );
+        $conn = $this->database->connect();
 
-        $query->bindParam(':username', $username);;
+        $query = $conn->prepare('SELECT * FROM users WHERE username = :username');
+        $query->bindParam(':username', $username);
         $query->execute();
 
         $user = $query->fetch(PDO::FETCH_ASSOC);

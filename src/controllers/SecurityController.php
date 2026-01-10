@@ -38,13 +38,16 @@ class SecurityController extends AppController
             return $this->render('login', ['messages' => 'Wrong password']);
         }
 
+        // fetch user details
+        $userDetailsRow = $this->userRepository->getUserDetailsByName($username);
+
         // create user session
 
         session_start();
         session_regenerate_id(true);
 
         // TODO map user without password
-        $_SESSION['user'] = $userRow;
+        $_SESSION['user'] = $userDetailsRow;
 
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/home");

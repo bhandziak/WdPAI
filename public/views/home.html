@@ -33,8 +33,15 @@ if (session_status() === PHP_SESSION_NONE) {
                     <div class="user-name">
                         <?= $_SESSION['user']['username'] ?? 'Guest' ?>
                     </div>
-                    <div class="user-role">
+                    <div class="user-datails">
                         <?= $_SESSION['user']['role'] ?? '' ?>
+                    </div>
+                    <div class="user-datails">
+                        <?= $_SESSION['user']['email'] ?? '' ?>
+                    </div>
+                    <div class="user-datails">
+                        score :
+                        <?= $_SESSION['user']['total_score'] ?? '0' ?>
                     </div>
                 </div>
 
