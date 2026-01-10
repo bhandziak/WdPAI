@@ -158,27 +158,56 @@ SELECT create_user(
 );
 
 
-INSERT INTO quizzes (title, albumCoverUrl, createdBy) VALUES
-(
-    'Classic Rock Riffs',
-    '/uploads/albumCover/photo.jpg',
-    1
-),
-(
-    'Jazz Essentials',
-    '/uploads/albumCover/photo.jpg',
-    1
-),
-(
-    'Movie Soundtracks',
-    NULL,
-    1
-),
-(
-    '90s Pop Hits',
-    '/uploads/albumCover/photo.jpg',
-    1
-);
+-- QUIZ 1: The Doors
+INSERT INTO quizzes (id, title, albumCoverUrl, createdBy)
+VALUES (1, 'The Doors', '/images/cover/thedoors.jpg', 1);
+
+-- Pytania i odpowiedzi dla The Doors
+INSERT INTO questions (id, quizId, text, audioUrl) VALUES
+(1, 1, 'Który utwór The Doors otwiera ich debiutancki album?', '/audio/light_my_fire.mp3'),
+(2, 1, 'W którym utworze The Doors możemy usłyszeć słowa "Riders on the storm"?', '/audio/riders_on_the_storm.mp3'),
+(3, 1, 'Który utwór The Doors pochodzi z albumu "The Doors" i jest jednym z ich pierwszych hitów?', '/audio/soul_kitchen.mp3');
+
+-- Odpowiedzi dla pytań
+INSERT INTO answers (id, questionId, text, isCorrect) VALUES
+(1, 1, 'Light My Fire', TRUE),
+(2, 1, 'Soul Kitchen', FALSE),
+(3, 1, 'Riders on the Storm', FALSE),
+(4, 1, 'The End', FALSE),
+
+(5, 2, 'Riders on the Storm', TRUE),
+(6, 2, 'Light My Fire', FALSE),
+(7, 2, 'Soul Kitchen', FALSE),
+(8, 2, 'Break on Through', FALSE),
+
+(9, 3, 'Soul Kitchen', TRUE),
+(10, 3, 'The End', FALSE),
+(11, 3, 'Light My Fire', FALSE),
+(12, 3, 'People Are Strange', FALSE);
 
 
+-- QUIZ 2: Pink Floyd
+INSERT INTO quizzes (id, title, albumCoverUrl, createdBy)
+VALUES (2, 'Pink Floyd', NULL, 1);
+
+INSERT INTO questions (id, quizId, text, audioUrl) VALUES
+(4, 2, 'W którym utworze Pink Floyd znajdziemy charakterystyczny śpiew dzieci w refrenie?', '/audio/another_brick_in_the_wall.mp3'),
+(5, 2, 'Który utwór Pink Floyd ma słynną gitarową melodię instrumentalną?', '/audio/any_colour_you_like.mp3'),
+(6, 2, 'W którym utworze Pink Floyd czas jest centralnym motywem tekstu?', '/audio/time.mp3');
+
+INSERT INTO answers (id, questionId, text, isCorrect) VALUES
+(13, 4, 'Another Brick in the Wall', TRUE),
+(14, 4, 'Time', FALSE),
+(15, 4, 'Any Colour You Like', FALSE),
+(16, 4, 'Comfortably Numb', FALSE),
+
+(17, 5, 'Any Colour You Like', TRUE),
+(18, 5, 'Money', FALSE),
+(19, 5, 'Time', FALSE),
+(20, 5, 'Shine On You Crazy Diamond', FALSE),
+
+(21, 6, 'Time', TRUE),
+(22, 6, 'Brain Damage', FALSE),
+(23, 6, 'Another Brick in the Wall', FALSE),
+(24, 6, 'Us and Them', FALSE);
 

@@ -66,7 +66,7 @@ class QuizRepository extends Repository
 
         $stmt = $conn->prepare("
             SELECT * FROM quiz_content
-            WHERE q.id = :quizId
+            WHERE quiz_id = :quizId
         ");
 
         $stmt->execute([':quizId' => $quizId]);

@@ -63,9 +63,12 @@ if (session_status() === PHP_SESSION_NONE) {
                 <?php if (!empty($quizzes)): ?>
                 <?php foreach ($quizzes as $quiz): ?>
                 <a href="/play_quiz?id=<?= $quiz['id'] ?>" class="quiz-tile">
-                    <img class="quiz-tile-album-cover"
-                        src="<?=  'http://localhost:8080/public' . $quiz['albumcoverurl'] ?>"
-                        alt="<?= $quiz['title'] ?>" />
+                    <img class="quiz-tile-album-cover" src="
+                        <?php if (!empty($quiz['albumcoverurl'])): ?>
+                            <?=  'http://localhost:8080/public' . $quiz['albumcoverurl']?>
+                        <?php else: ?>
+                            <?=  'http://localhost:8080/public/images/cover/default.png'?>
+                        <?php endif; ?>" alt="<?= $quiz['title'] ?>" />
 
                     <div class="quiz-tile-title">
                         <?= $quiz['title'] ?>

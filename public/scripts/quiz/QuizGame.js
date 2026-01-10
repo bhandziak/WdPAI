@@ -17,8 +17,10 @@ class QuizGame {
     }
 
     setUpUI() {
-        const albumCoverUrl = QuizConfig.SERVER_DIR + this.quiz.albumCoverUrl;
-        this.ui.setAlbumCover(albumCoverUrl);
+        if (this.quiz.albumCoverUrl) {
+            const albumCoverUrl = QuizConfig.SERVER_DIR + this.quiz.albumCoverUrl;
+            this.ui.setAlbumCover(albumCoverUrl);
+        }
 
         this.ui.setQuizName(this.quiz.title);
     }

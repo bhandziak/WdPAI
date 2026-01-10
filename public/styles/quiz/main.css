@@ -10,10 +10,10 @@
     --header-height: 3em;
 }
 
-html,
+/* html,
 body {
     overflow: hidden;
-}
+} */
 
 main {
     min-height: calc(100vh - var(--header-height));
