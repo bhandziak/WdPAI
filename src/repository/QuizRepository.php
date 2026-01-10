@@ -13,7 +13,6 @@ class QuizRepository extends Repository
                 q.id,
                 q.title,
                 q.albumCoverUrl,
-                q.createdBy,
                 u.username AS createdByUsername
             FROM quizzes q
             JOIN users u ON u.id = q.createdBy
@@ -107,7 +106,6 @@ class QuizRepository extends Repository
             return null;
         }
 
-        // 🧠 Mapowanie flat rows → struktura drzewa
         $quiz = [
             'id' => $rows[0]['quiz_id'],
             'title' => $rows[0]['quiz_title'],

@@ -10,83 +10,62 @@
 </head>
 
 <body>
-    <!DOCTYPE html>
-    <html lang="en">
+    <div class="main-login-layout">
+        <div class="login-panel">
+            <div class="login-content">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
-        <link rel="stylesheet" type="text/css" href="/public/styles/login.css" />
-        <title>LOGIN</title>
-    </head>
-
-    <body>
-        <div class="main-login-layout">
-            <div class="login-panel">
-                <div class="login-content">
-
-                    <div class="brand">
-                        <div class="brand-icon">🎵</div>
-                        <h1>TuneInQuiz</h1>
-                        <p>Test Your Music IQ</p>
-                    </div>
-
-                    <div class="form-content">
-                        <div class="switcher">
-                            <div class="switcher-content">
-                                <a href="/login">Log In</a>
-                                <a class="active" href="/register">Register</a>
-                            </div>
-
-                        </div>
-
-                        <form method="POST" action="/register">
-                            <label>Username</label>
-                            <input type="text" name="username" placeholder="Enter username">
-
-                            <label>Password</label>
-                            <input type="password" name="password" placeholder="Enter password">
-
-                            <input type="password" name="password2" placeholder="Repeat password">
-
-                            <?php if(isset($messages)): ?>
-                            <p class="messages">
-                                <?= $messages; ?>
-                            </p>
-                            <?php endif; ?>
-                            <a class="forgot">Forgot Password?</a>
-
-                            <button type="submit">Register</button>
-                        </form>
-                    </div>
+                <div class="brand">
+                    <div class="brand-icon">🎵</div>
+                    <h1>TuneInQuiz</h1>
+                    <p>Test Your Music IQ</p>
                 </div>
 
+                <div class="form-content">
+                    <div class="switcher">
+                        <div class="switcher-content">
+                            <a href="/login">Log In</a>
+                            <a class="active" href="/register">Register</a>
+                        </div>
+
+                    </div>
+
+                    <form method="POST" action="/register">
+                        <label>Username</label>
+                        <input type="text" name="username" placeholder="Enter username" required>
+
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter password" required>
+
+                        <input type="password" name="password2" placeholder="Repeat password" required>
+
+                        <label>Email (optional)</label>
+                        <input type="email" name="email" placeholder="Enter your email">
+
+                        <label>Favorite music genre (optional)</label>
+                        <select name="favoriteGenre">
+                            <option value="">Choose genre</option>
+                            <option value="rock">Rock</option>
+                            <option value="pop">Pop</option>
+                            <option value="hiphop">Hip-hop</option>
+                            <option value="jazz">Jazz</option>
+                            <option value="electronic">Electronic</option>
+                            <option value="classical">Classical</option>
+                        </select>
+
+
+                        <?php if(isset($messages)): ?>
+                        <p class="messages">
+                            <?= $messages; ?>
+                        </p>
+                        <?php endif; ?>
+
+                        <br />
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
             </div>
-    </body>
 
-    </html>
-
-    <!-- <form method="POST" action="/register">
-
-    <h1>Register Page</h1>
-
-        <?php if(isset($messages)): ?>
-            <p class="messages">
-                <?= $messages; ?>
-            </p>
-        <?php endif; ?>
-
-        <input type="text" name="email" placeholder="Podaj email">
-
-        <input type="password" name="password" placeholder="Podaj hasło">
-        <input type="password" name="password2" placeholder="Powtórz hasło">
-
-        <input type="text" name="firstName" placeholder="Imie">
-        <input type="text" name="lastName" placeholder="Nazwisko">
-
-        <button type="submit">Register</button>
-    </form> -->
+        </div>
 </body>
 
 </html>
