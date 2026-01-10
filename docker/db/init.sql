@@ -119,7 +119,33 @@ LEFT JOIN quiz_results qr
 GROUP BY u.id, u.username, u.role ,ud.email, ud.favoriteGenre
 ORDER BY total_score DESC;
 
+CREATE OR REPLACE VIEW quiz_content AS
+SELECT
+    q.id            AS quiz_id,
+    q.title         AS quiz_title,
+    q.albumCoverUrl AS quiz_cover,
 
+    qs.id           AS question_id,
+    qs.text         AS question_text,
+    qs.audioUrl     AS question_audio,
+
+    a.id            AS answer_id,
+    a.text          AS answer_text,
+    a.isCorrect     AS answer_correct
+FROM quizzes q
+LEFT JOIN questions qs ON qs.quizId = q.id
+LEFT JOIN answers a ON a.questionId = qs.id
+ORDER BY qs.id, a.id;
+
+CREATE OR REPLACE VIEW quiz_preview AS
+SELECT 
+    q.id,
+    q.title,
+    q.albumCoverUrl,
+    u.username AS createdByUsername
+FROM quizzes q
+JOIN users u ON u.id = q.createdBy
+ORDER BY q.id DESC;
 
 -- DUMMY DATA
 

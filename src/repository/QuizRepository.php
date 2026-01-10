@@ -9,14 +9,7 @@ class QuizRepository extends Repository
         $conn = $this->database->connect();
 
         $stmt = $conn->prepare("
-            SELECT 
-                q.id,
-                q.title,
-                q.albumCoverUrl,
-                u.username AS createdByUsername
-            FROM quizzes q
-            JOIN users u ON u.id = q.createdBy
-            ORDER BY q.id DESC
+            SELECT * FROM quiz_preview
             LIMIT 10
         ");
 
@@ -34,16 +27,8 @@ class QuizRepository extends Repository
         $conn = $this->database->connect();
 
         $stmt = $conn->prepare("
-            SELECT 
-                q.id,
-                q.title,
-                q.albumCoverUrl,
-                q.createdBy,
-                u.username AS createdByUsername
-            FROM quizzes q
-            JOIN users u ON u.id = q.createdBy
-            WHERE LOWER(q.title) LIKE LOWER(:search)
-            ORDER BY q.id DESC
+            SELECT * FROM quiz_preview
+            WHERE LOWER(title) LIKE LOWER(:search)
         ");
 
         $stmt->bindValue(':search', '%' . $searchText . '%', PDO::PARAM_STR);
@@ -80,24 +65,9 @@ class QuizRepository extends Repository
         $conn = $this->database->connect();
 
         $stmt = $conn->prepare("
-        SELECT
-            q.id            AS quiz_id,
-            q.title         AS quiz_title,
-            q.albumCoverUrl AS quiz_cover,
-
-            qs.id           AS question_id,
-            qs.text         AS question_text,
-            qs.audioUrl     AS question_audio,
-
-            a.id            AS answer_id,
-            a.text          AS answer_text,
-            a.isCorrect     AS answer_correct
-        FROM quizzes q
-        LEFT JOIN questions qs ON qs.quizId = q.id
-        LEFT JOIN answers a ON a.questionId = qs.id
-        WHERE q.id = :quizId
-        ORDER BY qs.id, a.id
-    ");
+            SELECT * FROM quiz_content
+            WHERE q.id = :quizId
+        ");
 
         $stmt->execute([':quizId' => $quizId]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
