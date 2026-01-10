@@ -115,4 +115,23 @@ class SecurityController extends AppController
 
         return $this->render('login', ['messages' => 'User registered successfully. Please login.']);
     }
+
+    public function refreshUserSession(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user']['username'])) {
+            return;
+        }
+
+        $username = $_SESSION['user']['username'];
+
+        $userDetailsRow = $this->userRepository->getUserDetailsByName($username);
+
+        if ($userDetailsRow) {
+            $_SESSION['user'] = $userDetailsRow;
+        }
+    }
 }

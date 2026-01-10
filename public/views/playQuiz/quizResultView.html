@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $quizId = $data['quizId'];
-$quizName = $data['quizName'];
+$quizTitle = $data['quizTitle'];
 $albumCoverUrl = $data['albumCoverUrl'];
 $score = $data['score'];
 $totalTime = $data['totalTime'];
@@ -70,7 +70,7 @@ $seconds = $totalTime % 60;
 
                 <div class="result-quiz-info">
                     <div class="result-quiz-title">
-                        <?= $quizName ?? "" ?>
+                        <?= $quizTitle ?? "" ?>
                     </div>
                     <img class="result-quiz-image" src="
                         <?php if (!empty($albumCoverUrl)): ?>

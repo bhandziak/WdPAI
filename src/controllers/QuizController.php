@@ -2,15 +2,20 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . './../repository/QuizRepository.php';
+require_once __DIR__ . './../repository/QuizResultRepository.php';
 
 class QuizController extends AppController
 {
 
     private QuizRepository $quizRepository;
+    private QuizResultRepository $quizResultRepository;
+    private SecurityController $securityController;
 
     public function __construct()
     {
         $this->quizRepository = new QuizRepository();
+        $this->quizResultRepository = new QuizResultRepository();
+        $this->securityController = SecurityController::getInstance("SecurityController");
     }
 
     public function index()
@@ -54,9 +59,14 @@ class QuizController extends AppController
 
     public function finishQuiz()
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         // get data
         $data = json_decode(file_get_contents('php://input'), true);
 
+        $userId = (int) $_SESSION['user']['user_id'];
         $quizId = $data['quizId'] ?? 0;
         $score = $data['score'] ?? 0;
         $totalTime = $data['totalTime'] ?? 0;
@@ -64,13 +74,30 @@ class QuizController extends AppController
         $incorrectAnswers = $data['incorrectAnswers'] ?? 0;
 
         // save to db
+        $this->quizResultRepository->saveQuizResult(
+            $userId,
+            $quizId,
+            $score,
+            $correctAnswers,
+            $incorrectAnswers,
+            $totalTime
+        );
+
+        // refresh session data
+        $this->securityController->refreshUserSession();
+
+        // fetch other data (quizName, albumCoverUrl)
+        $quizData = $this->quizRepository->getQuizContentById($quizId);
+        $quizTitle = $quizData['title'] ?? "";
+        $albumCoverUrl = $quizData['albumCoverUrl'] ?? null;
+
 
         // render
         return $this->render('playQuiz/quizResultView', [
             'data' => [
                 'quizId' => $quizId,
-                'quizName' => "name",
-                'albumCoverUrl' => null,
+                'quizTitle' => $quizTitle,
+                'albumCoverUrl' => $albumCoverUrl,
                 'score' => $score,
                 'totalTime' => $totalTime,
                 'correctAnswers' => $correctAnswers,
