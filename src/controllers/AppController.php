@@ -1,10 +1,12 @@
 <?php
 
 
-class AppController {
+class AppController
+{
     private static array $instances = [];
 
-    public static function getInstance(string $controllerClass): self {
+    public static function getInstance(string $controllerClass): self
+    {
         if (!isset(self::$instances[$controllerClass])) {
             self::$instances[$controllerClass] = new $controllerClass();
         }
@@ -20,27 +22,26 @@ class AppController {
     {
         return $_SERVER["REQUEST_METHOD"] === 'POST';
     }
- 
+
 
     protected function render(?string $template = null, array $variables = [])
     {
-        $templatePath = 'public/views/'. $template.'.html';
-        $templatePath404 = 'public/views/404.html';
-        $output = "";
-                 
-        if(file_exists($templatePath)){
-
-            extract($variables);
-            
-            ob_start();
-            include $templatePath;
-            $output = ob_get_clean();
-        } else {
-            ob_start();
-            include $templatePath404;
-            $output = ob_get_clean();
+        if ($template === null) {
+            throw new Exception('Template not specified', 500);
         }
+
+        $templatePath = 'public/views/' . $template . '.html';
+
+        if (!file_exists($templatePath)) {
+            throw new Exception('View not found: ' . $template, 404);
+        }
+
+        extract($variables, EXTR_SKIP);
+
+        ob_start();
+        include $templatePath;
+        $output = ob_get_clean();
+
         echo $output;
     }
-
 }

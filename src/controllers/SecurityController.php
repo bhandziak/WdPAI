@@ -19,7 +19,7 @@ class SecurityController extends AppController
     public function login()
     {
         // render login
-        if (!$this->isPost()) {
+        if ($this->isGet()) {
             return $this->render('login');
         }
 
@@ -70,8 +70,10 @@ class SecurityController extends AppController
     }
 
     // walidacje w osobnym serwisie
+    #[AllowedMethods(['POST', 'GET'])]
     public function register()
     {
+        // render register
         if ($this->isGet()) {
             return $this->render("register");
         }
