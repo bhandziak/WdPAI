@@ -58,6 +58,7 @@ class SecurityController extends AppController
         exit;
     }
 
+    #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
     public function logout()
     {
@@ -125,11 +126,10 @@ class SecurityController extends AppController
     #[AllowedRules(['user', 'admin'])]
     public function refreshUserSession(): void
     {
-        if (!isset($_SESSION['user']['username'])) {
-            return;
-        }
+        /** @var User $user */
+        $user = $_SESSION['user'];
 
-        $username = $_SESSION['user']['username'];
+        $username = $user->getUsername();
 
         $userDetailsRow = $this->userRepository->getUserDetailsByName($username);
 

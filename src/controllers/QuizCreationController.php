@@ -44,10 +44,13 @@ class QuizCreationController extends AppController
         }
 
         // save to session
+        /** @var User $user */
+        $user = $_SESSION['user'];
+
         $_SESSION['quiz'] = [
             'title' => $title,
             'coverUrl' => $coverUrl,
-            'createdByUserId' => $_SESSION['user']['user_id'] ?? null,
+            'createdByUserId' => $user->getId(),
             'currentQuestionNumber' => 1
         ];
 

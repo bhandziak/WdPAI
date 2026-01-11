@@ -31,17 +31,17 @@ if (session_status() === PHP_SESSION_NONE) {
                 <img class="user-picture" />
                 <div class="user-info">
                     <div class="user-name">
-                        <?= $_SESSION['user']['username'] ?? 'Guest' ?>
+                        <?= $_SESSION['user']->getUsername() ?? '' ?>
                     </div>
                     <div class="user-datails">
-                        <?= $_SESSION['user']['role'] ?? '' ?>
+                        <?= $_SESSION['user']->getRole() ?? '' ?>
                     </div>
                     <div class="user-datails">
-                        <?= $_SESSION['user']['email'] ?? '' ?>
+                        <?= $_SESSION['user']->getEmail() ?? '' ?>
                     </div>
                     <div class="user-datails">
                         score :
-                        <?= $_SESSION['user']['total_score'] ?? '0' ?>
+                        <?= $_SESSION['user']->getTotalScore() ?? '0' ?>
                     </div>
                 </div>
 

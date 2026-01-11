@@ -15,11 +15,14 @@ function checkRulesAllowed(object $controller, string $methodName)
         $instance = $attributes[0]->newInstance();
         $allowedRoles = $instance->roles;
 
-        if (!isset($_SESSION['user'])) {
+        /** @var ?User $user */
+        $user = $_SESSION['user'];
+
+        if (!isset($user)) {
             throw new Exception('Access Denied: Not logged in', 401);
         }
 
-        if (!in_array($_SESSION['user']['role'], $allowedRoles)) {
+        if (!in_array($user->getRole(), $allowedRoles)) {
             throw new Exception('Access Denied: Wrong role', 403);
         }
     }

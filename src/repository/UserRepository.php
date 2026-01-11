@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Repository.php';
+require_once __DIR__ . './../models/User.php';
 
 class UserRepository extends Repository
 {
@@ -42,7 +43,7 @@ class UserRepository extends Repository
         $this->database->disconnect();
     }
 
-    public function getUserDetailsByName(string $username)
+    public function getUserDetailsByName(string $username): ?User
     {
         $conn = $this->database->connect();
 
@@ -50,10 +51,21 @@ class UserRepository extends Repository
         $query->bindParam(':username', $username);
         $query->execute();
 
-        $user = $query->fetch(PDO::FETCH_ASSOC);
+        $data = $query->fetch(PDO::FETCH_ASSOC);
         $this->database->disconnect();
 
-        return $user;
+        if (!$data) {
+            return null;
+        }
+
+        return new User(
+            (int)$data['user_id'],
+            $data['username'],
+            $data['role'],
+            $data['email'] ?? null,
+            $data['favoriteGenre'] ?? null,
+            (int)$data['total_score']
+        );
     }
 
     public function getUserByName(string $username)

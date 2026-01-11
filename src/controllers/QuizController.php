@@ -78,7 +78,10 @@ class QuizController extends AppController
         // get data
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $userId = (int) $_SESSION['user']['user_id'];
+        /** @var User $user */
+        $user = $_SESSION['user'];
+
+        $userId = (int) $user->getId();
         $quizId = $data['quizId'] ?? 0;
         $score = $data['score'] ?? 0;
         $totalTime = $data['totalTime'] ?? 0;
