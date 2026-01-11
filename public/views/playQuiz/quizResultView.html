@@ -3,13 +3,15 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$quizId = $data['quiz_id'];
-$quizTitle = $data['quiz_title'];
-$albumCoverUrl = $data['album_cover_url'];
-$score = $data['score'];
-$totalTime = $data['total_time'];
-$correctAnswers = $data['correct_answers'];
-$incorrectAnswers = $data['incorrect_answers'];
+/** @var FinishQuizDto $data */
+
+$quizId = $data->quiz_id;
+$quizTitle = $data->quiz_title;
+$albumCoverUrl = $data->album_cover_url;
+$score = $data->score;
+$totalTime = $data->total_time;
+$correctAnswers = $data->correct_answers;
+$incorrectAnswers = $data->incorrect_answers;
 $allAnswers = $correctAnswers +  $incorrectAnswers;
 
 $scorePercent = (int)(($correctAnswers / $allAnswers) * 100);

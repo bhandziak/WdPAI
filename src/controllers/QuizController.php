@@ -6,6 +6,8 @@ require_once __DIR__ . './../repository/QuizResultRepository.php';
 require_once __DIR__ . '/../middleware/AllowedMethods.php';
 require_once __DIR__ . '/../middleware/AllowedRules.php';
 require_once __DIR__ . '/../middleware/QuizSessionRequired.php';
+require_once __DIR__ . '/../mappers/QuizResultMapper.php';
+require_once __DIR__ . '/../mappers/FinishQuizMapper.php';
 
 class QuizController extends AppController
 {
@@ -82,42 +84,29 @@ class QuizController extends AppController
         $user = $_SESSION['user'];
 
         $userId = (int) $user->getId();
-        $quizId = $data['quiz_id'] ?? 0;
-        $score = $data['score'] ?? 0;
-        $totalTime = $data['total_time'] ?? 0;
-        $correctAnswers = $data['correct_answers'] ?? 0;
-        $incorrectAnswers = $data['incorrect_answers'] ?? 0;
+
+        $quizResult = QuizResultMapper::fromData($data, $userId);
 
         // save to db
         $this->quizResultRepository->saveQuizResult(
-            $userId,
-            $quizId,
-            $score,
-            $correctAnswers,
-            $incorrectAnswers,
-            $totalTime
+            $quizResult->user_id,
+            $quizResult->quiz_id,
+            $quizResult->score,
+            $quizResult->correct_answers,
+            $quizResult->incorrect_answers,
+            $quizResult->total_time
         );
 
         // refresh session data
         $this->securityController->refreshUserSession();
 
         // fetch other data (quizName, albumCoverUrl)
-        $quizData = $this->quizRepository->getQuizContentById($quizId);
-        $quizTitle = $quizData->title;
-        $albumCoverUrl = $quizData->album_cover_url;
-
+        $quizData = $this->quizRepository->getQuizContentById($quizResult->quiz_id);
+        $finishQuizDto = FinishQuizMapper::fromResultAndQuiz($quizResult, $quizData);
 
         // render
         return $this->render('playQuiz/quizResultView', [
-            'data' => [
-                'quiz_id' => $quizId,
-                'quiz_title' => $quizTitle,
-                'album_cover_url' => $albumCoverUrl,
-                'score' => $score,
-                'total_time' => $totalTime,
-                'correct_answers' => $correctAnswers,
-                'incorrect_answers' => $incorrectAnswers
-            ]
+            'data' => $finishQuizDto
         ]);
     }
 
