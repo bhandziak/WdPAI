@@ -5,6 +5,7 @@ require_once __DIR__ . './../repository/QuizRepository.php';
 require_once __DIR__ . './../repository/QuizResultRepository.php';
 require_once __DIR__ . '/../middleware/AllowedMethods.php';
 require_once __DIR__ . '/../middleware/AllowedRules.php';
+require_once __DIR__ . '/../middleware/QuizSessionRequired.php';
 
 class QuizController extends AppController
 {
@@ -62,6 +63,8 @@ class QuizController extends AppController
     }
 
     // /api/quiz/finish
+    #[AllowedMethods(['POST'])]
+    #[AllowedRules(['user', 'admin'])]
     public function finishQuiz()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -112,6 +115,8 @@ class QuizController extends AppController
     }
 
     // /api/quiz/details
+    #[AllowedMethods(['GET'])]
+    #[AllowedRules(['user', 'admin'])]
     public function getQuizDetails()
     {
         if (!isset($_GET['id'])) {

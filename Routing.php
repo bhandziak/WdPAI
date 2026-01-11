@@ -70,13 +70,15 @@ class Routing
         ],
 
         // PLAY QUIZ
-        "api/quiz/details" => [
-            "controller" => "QuizController",
-            "action" => "getQuizDetails"
-        ],
         "play_quiz" => [
             "controller" => "QuizController",
             "action" => "playQuiz"
+        ],
+
+        // API
+        "api/quiz/details" => [
+            "controller" => "QuizController",
+            "action" => "getQuizDetails"
         ],
         "api/quiz/finish" => [
             "controller" => "QuizController",
@@ -86,6 +88,8 @@ class Routing
 
     public static function run(string $path)
     {
+        $isApi = str_starts_with($path, 'api/');
+
         try {
             if (!isset(self::$routes[$path])) {
                 throw new Exception('Page not found', 404);
@@ -104,11 +108,20 @@ class Routing
         } catch (Exception $e) {
             http_response_code($e->getCode() ?: 500);
 
-            self::$errorController ??= AppController::getInstance("ErrorController");
-            self::$errorController->error(
-                $e->getCode() ?: 500,
-                $e->getMessage()
-            );
+            // For APIs
+            if ($isApi) {
+                echo json_encode([
+                    'error' => $e->getMessage(),
+                    'code' => $e->getCode() ?: 500
+                ]);
+                exit;
+            } else {
+                self::$errorController ??= AppController::getInstance("ErrorController");
+                self::$errorController->error(
+                    $e->getCode() ?: 500,
+                    $e->getMessage()
+                );
+            }
         }
     }
 }

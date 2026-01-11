@@ -183,12 +183,7 @@ class QuizCreationController extends AppController
 
             header('Location: /quiz_created_success');
         } catch (Throwable $err) {
-            return $this->render(
-                'error',
-                [
-                    'message' => $err
-                ]
-            );
+            throw new Exception('An error occurred while creating the quiz', 500);
         }
         exit();
     }
