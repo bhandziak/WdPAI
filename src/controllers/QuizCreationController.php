@@ -3,6 +3,7 @@
 require_once 'AppController.php';
 require_once __DIR__ . './../services/QuizService.php';
 require_once __DIR__ . './../services/UploadService.php';
+require_once __DIR__ . './../services/QuestionValidationService.php';
 
 require_once __DIR__ . '/../middleware/AllowedMethods.php';
 require_once __DIR__ . '/../middleware/AllowedRules.php';
@@ -13,7 +14,7 @@ class QuizCreationController extends AppController
     private QuizService $quizService;
     private UploadService $imageUploadService;
     private UploadService $audioUploadService;
-
+    private QuestionValidationService $questionValidationService;
 
     public function __construct()
     {
@@ -26,6 +27,7 @@ class QuizCreationController extends AppController
             __DIR__ . '/../../public/uploads/audio/',
             '/uploads/audio/'
         );
+        $this->questionValidationService = new QuestionValidationService();
     }
 
     #[AllowedMethods(['POST'])]
@@ -68,46 +70,24 @@ class QuizCreationController extends AppController
     #[QuizSessionRequired]
     public function addQuestionToQuiz()
     {
-        // 1. Fetch data form
-        $questionText = $_POST['question'] ?? null;
-        if (!$questionText) {
-            return $this->render('makeQuiz/addQuestion', ['error' => 'Question text is required']);
-        }
+        $validated = [];
 
-        $answers = [
-            'A' => $_POST['ans_A'] ?? null,
-            'B' => $_POST['ans_B'] ?? null,
-            'C' => $_POST['ans_C'] ?? null,
-            'D' => $_POST['ans_D'] ?? null
-        ];
-
-        // 2. Filter null answers
-        $answers = array_filter($answers, fn($ans) => !empty($ans));
-
-        $correctKey = $_POST['correct'] ?? null;
-
-        if (!$correctKey) {
-            return $this->render('makeQuiz/addQuestion', [
-                'error' => 'Correct answer is required'
-            ]);
-        }
-
-        // 2b. Check if correct answer exits
-
-        if (!array_key_exists($correctKey, $answers)) {
-            return $this->render('makeQuiz/addQuestion', [
-                'error' => 'The correct answer does not exist or is empty'
-            ]);
-        }
-
-        // 3. Audio file upload
         try {
+            // 0. Validate inputs
+            $validated = $this->questionValidationService->validate($_POST);
+
+            // 1. Audio file upload
             $audioUrl = $this->audioUploadService->save($_FILES['cover'], 'audio');
         } catch (Exception $e) {
             return $this->render('makeQuiz/addQuestion', ['error' => $e->getMessage()]);
         }
 
-        // 4. Add question with answers to session
+        // 2. Extract question data
+        $questionText = $validated['question_text'];
+        $answers = $validated['answers'];
+        $correctKey = $validated['correct_key'];
+
+        // 3. Add question with answers to session
         $question = [
             'text' => $questionText,
             'audio_url' => $audioUrl,
@@ -126,10 +106,10 @@ class QuizCreationController extends AppController
         }
         $_SESSION['quiz']['questions'][] = $question;
 
-        // 5. Save current question number
+        // 4. Save current question number
         $_SESSION['quiz']['current_question_number'] = count($_SESSION['quiz']['questions']) + 1;
 
-        // 6. Save or next question
+        // 5. Save or next question
         if (isset($_POST['save'])) {
             header('Location: /save_quiz');
             exit();
