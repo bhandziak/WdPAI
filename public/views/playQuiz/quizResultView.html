@@ -12,8 +12,12 @@ $correctAnswers = $data['correctAnswers'];
 $incorrectAnswers = $data['incorrectAnswers'];
 $allAnswers = $correctAnswers +  $incorrectAnswers;
 
+$scorePercent = (int)(($correctAnswers / $allAnswers) * 100);
+
 $minutes = intdiv($totalTime, 60);
 $seconds = $totalTime % 60;
+
+$isOver50 = $scorePercent >= 50;
 ?>
 
 
@@ -84,22 +88,24 @@ $seconds = $totalTime % 60;
                         <?php endif; ?>" />
                 </div>
 
-                <div class="result-score-circle">
-                    <div class="score-value">
+                <div class="result-score-circle <?= !$isOver50 ? 'red' : '' ?>">
+                    <div class=" score-value">
                         <?= $score ?? "" ?>
                     </div>
-                    <div class="score-percent">
-                        <?= $allAnswers > 0 
-                            ? (int)(($correctAnswers / $allAnswers) * 100) 
-                            : 0 ?>
+                    <div class="score-percent <?= !$isOver50 ? 'red' : '' ?>">
+                        <?= $scorePercent ?>
                         %
                     </div>
                 </div>
 
                 <div class="result-text-wrapper">
-                    <h2 class="result-title-text">Great Job!</h2>
+                    <h2 class="result-title-text">
+                        <?= $isOver50 ? 'Great Job!' : 'Keep Practicing!' ?>
+                    </h2>
                     <p class="result-subtitle">
-                        You are a true Music Maestro!
+                        <?= $isOver50
+                            ? 'You are a true Music Maestro!'
+                            : 'Don’t worry — practice makes perfect' ?>
                     </p>
                 </div>
 

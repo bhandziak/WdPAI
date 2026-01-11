@@ -71,6 +71,10 @@ body {
     margin: 1em 0;
 }
 
+.result-score-circle.red {
+    border: 1em solid var(--red);
+}
+
 .score-value {
     font-size: 2em;
     font-weight: 700;
@@ -84,6 +88,10 @@ body {
 .score-percent {
     font-size: 0.9em;
     color: var(--green-light);
+}
+
+.score-percent.red {
+    color: var(--red);
 }
 
 /* === TITLES === */
