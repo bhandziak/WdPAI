@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Repository.php';
+require_once __DIR__ . './../mappers/QuizPreviewMapper.php';
 
 class QuizRepository extends Repository
 {
@@ -15,11 +16,17 @@ class QuizRepository extends Repository
 
         $stmt->execute();
 
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->database->disconnect();
 
-        return $result ?: null;
+        if (!$rows) {
+            return [];
+        }
+
+        return array_map(
+            fn($row) => QuizPreviewMapper::fromArray($row),
+            $rows
+        );
     }
 
     public function getQuizzesByText(string $searchText): ?array
@@ -34,25 +41,31 @@ class QuizRepository extends Repository
         $stmt->bindValue(':search', '%' . $searchText . '%', PDO::PARAM_STR);
         $stmt->execute();
 
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->database->disconnect();
 
-        return $result ?: null;
+        if (!$rows) {
+            return [];
+        }
+
+        return array_map(
+            fn($row) => QuizPreviewMapper::fromArray($row),
+            $rows
+        );
     }
 
     public function createQuiz(PDO $conn, array $quiz): int
     {
         $stmt = $conn->prepare("
-            INSERT INTO quizzes (title, albumCoverUrl, createdBy)
-            VALUES (:title, :coverUrl, :createdBy)
+            INSERT INTO quizzes (title, album_cover_url, created_by)
+            VALUES (:title, :album_cover_url, :created_by)
             RETURNING id
         ");
 
         $stmt->execute([
             ':title' => $quiz['title'],
-            ':coverUrl' => $quiz['coverUrl'],
-            ':createdBy' => $quiz['createdByUserId']
+            ':album_cover_url' => $quiz['album_cover_url'],
+            ':created_by' => $quiz['created_by']
         ]);
 
         $quizId = $stmt->fetchColumn();
@@ -66,10 +79,10 @@ class QuizRepository extends Repository
 
         $stmt = $conn->prepare("
             SELECT * FROM quiz_content
-            WHERE quiz_id = :quizId
+            WHERE quiz_id = :quiz_id
         ");
 
-        $stmt->execute([':quizId' => $quizId]);
+        $stmt->execute([':quiz_id' => $quizId]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($rows)) {
@@ -79,7 +92,7 @@ class QuizRepository extends Repository
         $quiz = [
             'id' => $rows[0]['quiz_id'],
             'title' => $rows[0]['quiz_title'],
-            'albumCoverUrl' => $rows[0]['quiz_cover'],
+            'album_cover_url' => $rows[0]['quiz_cover'],
             'questions' => []
         ];
 
@@ -92,7 +105,7 @@ class QuizRepository extends Repository
                     $questionsMap[$row['question_id']] = [
                         'id' => $row['question_id'],
                         'text' => $row['question_text'],
-                        'audioUrl' => $row['question_audio'],
+                        'audio_url' => $row['question_audio'],
                         'answers' => []
                     ];
                 }
@@ -101,7 +114,7 @@ class QuizRepository extends Repository
                     $questionsMap[$row['question_id']]['answers'][] = [
                         'id' => $row['answer_id'],
                         'text' => $row['answer_text'],
-                        'isCorrect' => (bool)$row['answer_correct']
+                        'is_correct' => (bool)$row['answer_correct']
                     ];
                 }
             }

@@ -7,15 +7,15 @@ class QuestionRepository extends Repository
     public function addQuestionToQuiz(PDO $conn, int $quizId, array $question): int
     {
         $stmt = $conn->prepare("
-            INSERT INTO questions (quizId, text, audioUrl)
-            VALUES (:quizId, :text, :audioUrl)
+            INSERT INTO questions (quiz_id, text, audio_url)
+            VALUES (:quiz_id, :text, :audio_url)
             RETURNING id
         ");
 
         $stmt->execute([
-            ':quizId' => $quizId,
+            ':quiz_id' => $quizId,
             ':text' => $question['text'],
-            ':audioUrl' => $question['audioUrl']
+            ':audio_url' => $question['audio_url']
         ]);
 
         $questionId = $stmt->fetchColumn();

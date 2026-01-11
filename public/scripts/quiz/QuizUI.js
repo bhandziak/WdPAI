@@ -71,7 +71,7 @@ class QuizUI {
             btn.textContent = answer.text;
 
             btn.addEventListener('click', () => {
-                onAnswer(answer.isCorrect, index);
+                onAnswer(answer.is_correct, index);
             });
 
             this.#answersEl.appendChild(btn);

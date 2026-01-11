@@ -3,14 +3,15 @@ CREATE TYPE user_role AS ENUM ('user', 'admin');
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
-    passwordHash VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
     role user_role NOT NULL DEFAULT 'user'
 );
+
 
 CREATE TABLE user_details (
     user_id INT PRIMARY KEY,
     email VARCHAR(255),
-    favoriteGenre VARCHAR(50),
+    favorite_genre VARCHAR(50),
 
     CONSTRAINT fk_user_details_user
         FOREIGN KEY (user_id)
@@ -21,35 +22,35 @@ CREATE TABLE user_details (
 CREATE TABLE quizzes (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    albumCoverUrl VARCHAR(500),
-    createdBy INT NOT NULL,
+    album_cover_url VARCHAR(500),
+    created_by INT NOT NULL,
 
     CONSTRAINT fk_quiz_user
-        FOREIGN KEY (createdBy)
+        FOREIGN KEY (created_by)
         REFERENCES users(id)
         ON DELETE CASCADE
 );
 
 CREATE TABLE questions (
     id SERIAL PRIMARY KEY,
-    quizId INT NOT NULL,
+    quiz_id INT NOT NULL,
     text VARCHAR(1000) NOT NULL,
-    audioUrl VARCHAR(500),
+    audio_url VARCHAR(500),
 
     CONSTRAINT fk_question_quiz
-        FOREIGN KEY (quizId)
+        FOREIGN KEY (quiz_id)
         REFERENCES quizzes(id)
         ON DELETE CASCADE
 );
 
 CREATE TABLE answers (
     id SERIAL PRIMARY KEY,
-    questionId INT NOT NULL,
+    question_id INT NOT NULL,
     text VARCHAR(1000) NOT NULL,
-    isCorrect BOOLEAN NOT NULL DEFAULT FALSE,
+    is_correct BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT fk_answer_question
-        FOREIGN KEY (questionId)
+        FOREIGN KEY (question_id)
         REFERENCES questions(id)
         ON DELETE CASCADE
 );
@@ -93,11 +94,11 @@ AS $$
 DECLARE
     v_user_id INT;
 BEGIN
-    INSERT INTO users (username, passwordHash, role)
+    INSERT INTO users (username, password_hash, role)
     VALUES (p_username, p_password_hash, p_role)
     RETURNING id INTO v_user_id;
 
-    INSERT INTO user_details (user_id, email, favoriteGenre)
+    INSERT INTO user_details (user_id, email, favorite_genre)
     VALUES (v_user_id, p_email, p_favorite_genre);
 
     RETURN v_user_id;
@@ -112,42 +113,40 @@ SELECT
     u.username,
     u.role,
     ud.email,
-    ud.favoriteGenre,
+    ud.favorite_genre,
     COALESCE(SUM(qr.score), 0) AS total_score
 FROM users u
-LEFT JOIN user_details ud
-    ON u.id = ud.user_id
-LEFT JOIN quiz_results qr
-    ON u.id = qr.user_id
-GROUP BY u.id, u.username, u.role ,ud.email, ud.favoriteGenre
+LEFT JOIN user_details ud ON u.id = ud.user_id
+LEFT JOIN quiz_results qr ON u.id = qr.user_id
+GROUP BY u.id, u.username, u.role, ud.email, ud.favorite_genre
 ORDER BY total_score DESC;
 
 CREATE OR REPLACE VIEW quiz_content AS
 SELECT
-    q.id            AS quiz_id,
-    q.title         AS quiz_title,
-    q.albumCoverUrl AS quiz_cover,
+    q.id AS quiz_id,
+    q.title AS quiz_title,
+    q.album_cover_url AS quiz_cover,
 
-    qs.id           AS question_id,
-    qs.text         AS question_text,
-    qs.audioUrl     AS question_audio,
+    qs.id AS question_id,
+    qs.text AS question_text,
+    qs.audio_url AS question_audio,
 
-    a.id            AS answer_id,
-    a.text          AS answer_text,
-    a.isCorrect     AS answer_correct
+    a.id AS answer_id,
+    a.text AS answer_text,
+    a.is_correct AS answer_correct
 FROM quizzes q
-LEFT JOIN questions qs ON qs.quizId = q.id
-LEFT JOIN answers a ON a.questionId = qs.id
+LEFT JOIN questions qs ON qs.quiz_id = q.id
+LEFT JOIN answers a ON a.question_id = qs.id
 ORDER BY qs.id, a.id;
 
 CREATE OR REPLACE VIEW quiz_preview AS
 SELECT 
     q.id,
     q.title,
-    q.albumCoverUrl,
-    u.username AS createdByUsername
+    q.album_cover_url,
+    u.username AS created_by_username
 FROM quizzes q
-JOIN users u ON u.id = q.createdBy
+JOIN users u ON u.id = q.created_by
 ORDER BY q.id DESC;
 
 -- TRIGGERS
@@ -159,10 +158,11 @@ DECLARE
 BEGIN
     SELECT COUNT(*) INTO number_of_questions
     FROM questions
-    WHERE quizId = NEW.quiz_id;
+    WHERE quiz_id = NEW.quiz_id;
 
     IF (NEW.correct_answers + NEW.incorrect_answers) != number_of_questions THEN
-        RAISE EXCEPTION 'The sum of correct answers and incorrect answers (% + %) does not match the number of questions in the quiz (%)',
+        RAISE EXCEPTION
+            'The sum of correct answers and incorrect answers (% + %) does not match the number of questions in the quiz (%)',
             NEW.correct_answers, NEW.incorrect_answers, number_of_questions;
     END IF;
 
@@ -186,19 +186,20 @@ SELECT create_user(
     'rock'
 );
 
-
--- QUIZ 1: The Doors
-INSERT INTO quizzes (id, title, albumCoverUrl, createdBy)
+INSERT INTO quizzes (id, title, album_cover_url, created_by)
 VALUES (1, 'The Doors', '/images/cover/thedoors.jpg', 1);
+INSERT INTO quizzes (id, title, album_cover_url, created_by)
+VALUES (2, 'Pink Floyd', NULL, 1);
 
--- Pytania i odpowiedzi dla The Doors
-INSERT INTO questions (id, quizId, text, audioUrl) VALUES
+INSERT INTO questions (id, quiz_id, text, audio_url) VALUES
 (1, 1, 'Który utwór The Doors otwiera ich debiutancki album?', '/audio/light_my_fire.mp3'),
 (2, 1, 'W którym utworze The Doors możemy usłyszeć słowa "Riders on the storm"?', '/audio/riders_on_the_storm.mp3'),
-(3, 1, 'Który utwór The Doors pochodzi z albumu "The Doors" i jest jednym z ich pierwszych hitów?', '/audio/soul_kitchen.mp3');
+(3, 1, 'Który utwór The Doors pochodzi z albumu "The Doors" i jest jednym z ich pierwszych hitów?', '/audio/soul_kitchen.mp3'),
+(4, 2, 'W którym utworze Pink Floyd znajdziemy charakterystyczny śpiew dzieci w refrenie?', '/audio/another_brick_in_the_wall.mp3'),
+(5, 2, 'Który utwór Pink Floyd ma słynną gitarową melodię instrumentalną?', '/audio/any_colour_you_like.mp3'),
+(6, 2, 'W którym utworze Pink Floyd czas jest centralnym motywem tekstu?', '/audio/time.mp3');
 
--- Odpowiedzi dla pytań
-INSERT INTO answers (id, questionId, text, isCorrect) VALUES
+INSERT INTO answers (id, question_id, text, is_correct) VALUES
 (1, 1, 'Light My Fire', TRUE),
 (2, 1, 'Soul Kitchen', FALSE),
 (3, 1, 'Riders on the Storm', FALSE),
@@ -212,19 +213,8 @@ INSERT INTO answers (id, questionId, text, isCorrect) VALUES
 (9, 3, 'Soul Kitchen', TRUE),
 (10, 3, 'The End', FALSE),
 (11, 3, 'Light My Fire', FALSE),
-(12, 3, 'People Are Strange', FALSE);
+(12, 3, 'People Are Strange', FALSE),
 
-
--- QUIZ 2: Pink Floyd
-INSERT INTO quizzes (id, title, albumCoverUrl, createdBy)
-VALUES (2, 'Pink Floyd', NULL, 1);
-
-INSERT INTO questions (id, quizId, text, audioUrl) VALUES
-(4, 2, 'W którym utworze Pink Floyd znajdziemy charakterystyczny śpiew dzieci w refrenie?', '/audio/another_brick_in_the_wall.mp3'),
-(5, 2, 'Który utwór Pink Floyd ma słynną gitarową melodię instrumentalną?', '/audio/any_colour_you_like.mp3'),
-(6, 2, 'W którym utworze Pink Floyd czas jest centralnym motywem tekstu?', '/audio/time.mp3');
-
-INSERT INTO answers (id, questionId, text, isCorrect) VALUES
 (13, 4, 'Another Brick in the Wall', TRUE),
 (14, 4, 'Time', FALSE),
 (15, 4, 'Any Colour You Like', FALSE),

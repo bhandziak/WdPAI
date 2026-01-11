@@ -82,11 +82,11 @@ class QuizController extends AppController
         $user = $_SESSION['user'];
 
         $userId = (int) $user->getId();
-        $quizId = $data['quizId'] ?? 0;
+        $quizId = $data['quiz_id'] ?? 0;
         $score = $data['score'] ?? 0;
-        $totalTime = $data['totalTime'] ?? 0;
-        $correctAnswers = $data['correctAnswers'] ?? 0;
-        $incorrectAnswers = $data['incorrectAnswers'] ?? 0;
+        $totalTime = $data['total_time'] ?? 0;
+        $correctAnswers = $data['correct_answers'] ?? 0;
+        $incorrectAnswers = $data['incorrect_answers'] ?? 0;
 
         // save to db
         $this->quizResultRepository->saveQuizResult(
@@ -104,19 +104,19 @@ class QuizController extends AppController
         // fetch other data (quizName, albumCoverUrl)
         $quizData = $this->quizRepository->getQuizContentById($quizId);
         $quizTitle = $quizData['title'] ?? "";
-        $albumCoverUrl = $quizData['albumCoverUrl'] ?? null;
+        $albumCoverUrl = $quizData['album_cover_url'] ?? null;
 
 
         // render
         return $this->render('playQuiz/quizResultView', [
             'data' => [
-                'quizId' => $quizId,
-                'quizTitle' => $quizTitle,
-                'albumCoverUrl' => $albumCoverUrl,
+                'quiz_id' => $quizId,
+                'quiz_title' => $quizTitle,
+                'album_cover_url' => $albumCoverUrl,
                 'score' => $score,
-                'totalTime' => $totalTime,
-                'correctAnswers' => $correctAnswers,
-                'incorrectAnswers' => $incorrectAnswers
+                'total_time' => $totalTime,
+                'correct_answers' => $correctAnswers,
+                'incorrect_answers' => $incorrectAnswers
             ]
         ]);
     }

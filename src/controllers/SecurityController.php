@@ -37,7 +37,7 @@ class SecurityController extends AppController
             return $this->render('login', ['messages' => 'User not found']);
         }
 
-        if (!password_verify($password, $userRow['passwordhash'])) {
+        if (!password_verify($password, $userRow['password_hash'])) {
             return $this->render('login', ['messages' => 'Wrong password']);
         }
 
@@ -84,7 +84,7 @@ class SecurityController extends AppController
         $password = $_POST['password'] ?? "";
         $password2 = $_POST['password2'] ?? "";
         $email = $_POST['email'] ?? null;
-        $favoriteGenre = $_POST['favoriteGenre'] ?? null;
+        $favoriteGenre = $_POST['favorite_genre'] ?? null;
 
         if (empty($username) || empty($password) || empty($password2)) {
             return $this->render('register', ['messages' => 'Fill all required fields']);

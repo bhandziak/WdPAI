@@ -49,9 +49,9 @@ class QuizCreationController extends AppController
 
         $_SESSION['quiz'] = [
             'title' => $title,
-            'coverUrl' => $coverUrl,
-            'createdByUserId' => $user->getId(),
-            'currentQuestionNumber' => 1
+            'album_cover_url' => $coverUrl,
+            'created_by' => $user->getId(),
+            'current_question_number' => 1
         ];
 
         header('Location: /add_question');
@@ -112,14 +112,14 @@ class QuizCreationController extends AppController
         // 4. Add question with answers to session
         $question = [
             'text' => $questionText,
-            'audioUrl' => $audioUrl,
+            'audio_url' => $audioUrl,
             'answers' => []
         ];
 
         foreach ($answers as $key => $text) {
             $question['answers'][] = [
                 'text' => $text,
-                'isCorrect' => ($key === $correctKey)
+                'is_correct' => ($key === $correctKey)
             ];
         }
 
@@ -129,7 +129,7 @@ class QuizCreationController extends AppController
         $_SESSION['quiz']['questions'][] = $question;
 
         // 5. Save current question number
-        $_SESSION['quiz']['currentQuestionNumber'] = count($_SESSION['quiz']['questions']) + 1;
+        $_SESSION['quiz']['current_question_number'] = count($_SESSION['quiz']['questions']) + 1;
 
         // 6. Save or next question
         if (isset($_POST['save'])) {
@@ -149,8 +149,8 @@ class QuizCreationController extends AppController
         $publicDir = __DIR__ . '/../../public';
 
         // 1. Remove cover image
-        if (!empty($_SESSION['quiz']['coverUrl'])) {
-            $coverPath =  $publicDir . $_SESSION['quiz']['coverUrl'];
+        if (!empty($_SESSION['quiz']['album_cover_url'])) {
+            $coverPath =  $publicDir . $_SESSION['quiz']['album_cover_url'];
             if (file_exists($coverPath)) {
                 unlink($coverPath);
             }
@@ -159,8 +159,8 @@ class QuizCreationController extends AppController
         // 2. Remove audio files (mp3) from questions
         if (!empty($_SESSION['quiz']['questions'])) {
             foreach ($_SESSION['quiz']['questions'] as $question) {
-                if (!empty($question['audioUrl'])) {
-                    $audioPath = $publicDir . $question['audioUrl'];
+                if (!empty($question['audio_url'])) {
+                    $audioPath = $publicDir . $question['audio_url'];
                     if (file_exists($audioPath)) {
                         unlink($audioPath);
                     }
@@ -188,7 +188,7 @@ class QuizCreationController extends AppController
 
             header('Location: /quiz_created_success');
         } catch (Throwable $err) {
-            throw new Exception('An error occurred while creating the quiz', 500);
+            throw new Exception('An error occurred while creating the quiz' . $err->getMessage(), 500);
         }
         exit();
     }

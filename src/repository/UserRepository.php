@@ -29,15 +29,15 @@ class UserRepository extends Repository
         $conn = $this->database->connect();
 
         $query = $conn->prepare(
-            'SELECT create_user(:username, :passwordHash, :role, :email, :favoriteGenre)'
+            'SELECT create_user(:username, :password_hash, :role, :email, :favorite_genre)'
         );
 
         $query->execute([
             ':username'       => $username,
-            ':passwordHash'   => $hashedPassword,
+            ':password_hash'   => $hashedPassword,
             ':role'           => $role,
             ':email'          => $email,
-            ':favoriteGenre'  => $favoriteGenre
+            ':favorite_genre'  => $favoriteGenre
         ]);
 
         $this->database->disconnect();
@@ -63,7 +63,7 @@ class UserRepository extends Repository
             $data['username'],
             $data['role'],
             $data['email'] ?? null,
-            $data['favoriteGenre'] ?? null,
+            $data['favorite_genre'] ?? null,
             (int)$data['total_score']
         );
     }

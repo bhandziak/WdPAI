@@ -12,6 +12,7 @@ class QuizGame {
     async start() {
         const quizId = this.quizId;
         this.quiz = await this.api.getQuizById(quizId);
+        console.log(this.quiz);
 
         this.setUpUI();
 
@@ -19,8 +20,8 @@ class QuizGame {
     }
 
     setUpUI() {
-        if (this.quiz.albumCoverUrl) {
-            const albumCoverUrl = QuizConfig.SERVER_DIR + this.quiz.albumCoverUrl;
+        if (this.quiz.album_cover_url) {
+            const albumCoverUrl = QuizConfig.SERVER_DIR + this.quiz.album_cover_url;
             this.ui.setAlbumCover(albumCoverUrl);
         }
 
@@ -53,7 +54,7 @@ class QuizGame {
 
 
         // audio
-        const audioUrl = QuizConfig.SERVER_DIR + question.audioUrl
+        const audioUrl = QuizConfig.SERVER_DIR + question.audio_url
         this.audio.play(audioUrl);
 
         // timer 
@@ -71,7 +72,7 @@ class QuizGame {
         this.timer.stop();
 
         // get info
-        const correctAnswerIndex = question.answers.findIndex(a => a.isCorrect === true);
+        const correctAnswerIndex = question.answers.findIndex(a => a.is_correct === true);
 
         const timeLeft = parseInt(this.ui.getTimerEl().textContent ?? 0);
 
@@ -98,17 +99,17 @@ class QuizGame {
         this.audio.stop();
 
         const score = this.state.score;
-        const totalTime = this.state.takenTime;
-        const correctAnswers = this.state.correctAnswers;
-        const incorrectAnswers = this.state.incorrectAnswers;
-        const quizId = this.quizId;
+        const total_time = this.state.takenTime;
+        const correct_answers = this.state.correctAnswers;
+        const incorrect_answers = this.state.incorrectAnswers;
+        const quiz_id = this.quizId;
 
         const dto = {
-            quizId,
+            quiz_id,
             score,
-            totalTime,
-            correctAnswers,
-            incorrectAnswers
+            total_time,
+            correct_answers,
+            incorrect_answers
         }
 
         try {
