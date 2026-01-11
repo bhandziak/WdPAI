@@ -74,33 +74,20 @@ class SecurityController extends AppController
             return $this->render("register");
         }
 
-        $username = $_POST['username'] ?? "";
-        $password = $_POST['password'] ?? "";
-        $password2 = $_POST['password2'] ?? "";
-        $email = $_POST['email'] ?? null;
-        $favoriteGenre = $_POST['favorite_genre'] ?? null;
-
-        if (empty($username) || empty($password) || empty($password2)) {
-            return $this->render('register', ['messages' => 'Fill all required fields']);
+        // validate registration
+        try {
+            $validatedData = $this->securityValidationService->validateRegistration($_POST);
+        } catch (InvalidArgumentException $e) {
+            return $this->render('register', ['messages' => $e->getMessage()]);
         }
 
-        if ($password !== $password2) {
-            return $this->render('register', ['messages' => 'Passwords are not the same']);
-        }
+        $username = $validatedData['username'];
+        $password = $validatedData['password'];
+        $email = $validatedData['email'];
+        $favoriteGenre = $validatedData['favorite_genre'];
 
-        // check if username is free
-        $userRow = $this->userRepository->getUserByName($username);
-        if ($userRow) {
-            return $this->render('register', ['messages' => 'Username is already taken']);
-        }
-
-        // validate email
-        if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->render('register', ['messages' => 'Invalid email address']);
-        }
-
+        // hash password
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
 
         try {
             $this->userRepository->createUser(
