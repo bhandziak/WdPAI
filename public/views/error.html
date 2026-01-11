@@ -5,14 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
-    <title>ERROR</title>
+    <link rel="stylesheet" type="text/css" href="/public/styles/error.css" />
+    <title>404 - Page not found</title>
 </head>
 
-<body style="background-color: black;">
-    <h1>ERROR</h1>
-    <p>
-        <?= $message ?>
-    </p>
+<body class="center-page">
+    <div class="error-content">
+        <h1>ERROR</h1>
+        <h2>
+            <?= $code ?>
+        </h2>
+        <p>
+            <?= $message ?>
+        </p>
+    </div>
 </body>
 
 </html>

@@ -1,13 +1,15 @@
 <?php
 
-class ErrorController extends AppController {
+class ErrorController extends AppController
+{
 
-    public function error(?string $details = null)
+    public function error(?int $code = 500, ?string $message = null)
     {
-        $message = $details ?? "Unexpected error";
+        $message = $message ?? "Unexpected error";
 
         return $this->render('error', [
-            'msg' => $message
+            'code' => $code,
+            'message' => $message
         ]);
     }
 }

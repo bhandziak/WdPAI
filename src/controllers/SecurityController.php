@@ -2,6 +2,7 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
+require_once __DIR__ . '/../middleware/AllowedMethods.php';
 
 class SecurityController extends AppController
 {
@@ -14,9 +15,10 @@ class SecurityController extends AppController
     }
 
 
+    #[AllowedMethods(['POST', 'GET'])]
     public function login()
     {
-        // nazewnictwo - early return
+        // render login
         if (!$this->isPost()) {
             return $this->render('login');
         }

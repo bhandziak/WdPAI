@@ -5,15 +5,11 @@ require_once 'src/controllers/ErrorController.php';
 require_once 'src/controllers/QuizController.php';
 require_once 'src/controllers/QuizCreationController.php';
 
-// TODO Controllery to singleton
-// TODO /dashboard/{$id}
-// URL: /dashboard/{$id}
-
-// dopracowanie elementów takie jak w prototypie na podobnym poziomie
+require_once 'src/middleware/checkRequestAllowed.php';
 
 class Routing
 {
-
+    private static ?ErrorController $errorController = null;
     public static $routes = [
         // AUTH
         "login" => [
@@ -84,27 +80,31 @@ class Routing
             "controller" => "QuizController",
             "action" => "finishQuiz"
         ],
-
-        // ERROR
-        "error" => [
-            "controller" => "ErrorController",
-            "action" => "error"
-        ],
-
-        // API
     ];
 
     public static function run(string $path)
     {
-        if (!isset(self::$routes[$path])) {
-            include "public/views/404.html";
-            return;
+        try {
+            if (!isset(self::$routes[$path])) {
+                throw new Exception('Page not found', 404);
+            }
+
+            $controller = self::$routes[$path]['controller'];
+            $action = self::$routes[$path]['action'];
+
+            $controllerObj = AppController::getInstance($controller);
+
+            checkRequestAllowed($controllerObj, $action);
+
+            $controllerObj->$action();
+        } catch (Exception $e) {
+            http_response_code($e->getCode() ?: 500);
+
+            self::$errorController ??= AppController::getInstance("ErrorController");
+            self::$errorController->error(
+                $e->getCode() ?: 500,
+                $e->getMessage()
+            );
         }
-
-        $controller = self::$routes[$path]['controller'];
-        $action = self::$routes[$path]['action'];
-
-        $controllerObj = AppController::getInstance($controller);
-        $controllerObj->$action();
     }
 }
