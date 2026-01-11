@@ -2,6 +2,8 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . './../services/QuizService.php';
+require_once __DIR__ . './../services/UploadService.php';
+
 require_once __DIR__ . '/../middleware/AllowedMethods.php';
 require_once __DIR__ . '/../middleware/AllowedRules.php';
 require_once __DIR__ . '/../middleware/QuizSessionRequired.php';
@@ -9,10 +11,21 @@ require_once __DIR__ . '/../middleware/QuizSessionRequired.php';
 class QuizCreationController extends AppController
 {
     private QuizService $quizService;
+    private UploadService $imageUploadService;
+    private UploadService $audioUploadService;
+
 
     public function __construct()
     {
         $this->quizService = new QuizService();
+        $this->imageUploadService = new UploadService(
+            __DIR__ . '/../../public/uploads/albumCover/',
+            '/uploads/albumCover/'
+        );
+        $this->audioUploadService = new UploadService(
+            __DIR__ . '/../../public/uploads/audio/',
+            '/uploads/audio/'
+        );
     }
 
     #[AllowedMethods(['POST'])]
@@ -27,20 +40,12 @@ class QuizCreationController extends AppController
 
         // album cover upload
         $coverUrl = null;
-        if (isset($_FILES['cover']) && $_FILES['cover']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . './../../public/uploads/albumCover/';
-
-            $tmpName = $_FILES['cover']['tmp_name'];
-            $extension = pathinfo($_FILES['cover']['name'], PATHINFO_EXTENSION);
-            $fileName = 'cover-' . time() . '.' . $extension;
-
-            $destination = $uploadDir . $fileName;
-
-            if (move_uploaded_file($tmpName, $destination)) {
-                $coverUrl = '/uploads/albumCover/' . $fileName;
-            } else {
-                return $this->render('makeQuiz/createQuiz', ['error' => 'Failed to upload cover image']);
+        try {
+            if (isset($_FILES['cover']) && $_FILES['cover']['error'] === UPLOAD_ERR_OK) {
+                $coverUrl = $this->imageUploadService->save($_FILES['cover'], 'cover');
             }
+        } catch (Exception $e) {
+            return $this->render('makeQuiz/createQuiz', ['error' => $e->getMessage()]);
         }
 
         // save to session
@@ -96,17 +101,10 @@ class QuizCreationController extends AppController
         }
 
         // 3. Audio file upload
-        $audioUrl = null;
-        if (isset($_FILES['cover']) && $_FILES['cover']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../../public/uploads/audio/';
-
-            $extension = pathinfo($_FILES['cover']['name'], PATHINFO_EXTENSION);
-            $fileName = 'audio-' . time() . '.' . $extension;
-            $destination = $uploadDir . $fileName;
-
-            if (move_uploaded_file($_FILES['cover']['tmp_name'], $destination)) {
-                $audioUrl = '/uploads/audio/' . $fileName;
-            }
+        try {
+            $audioUrl = $this->audioUploadService->save($_FILES['cover'], 'audio');
+        } catch (Exception $e) {
+            return $this->render('makeQuiz/addQuestion', ['error' => $e->getMessage()]);
         }
 
         // 4. Add question with answers to session
@@ -146,24 +144,18 @@ class QuizCreationController extends AppController
     #[QuizSessionRequired]
     public function cancelCreatingQuiz()
     {
-        $publicDir = __DIR__ . '/../../public';
-
         // 1. Remove cover image
         if (!empty($_SESSION['quiz']['album_cover_url'])) {
-            $coverPath =  $publicDir . $_SESSION['quiz']['album_cover_url'];
-            if (file_exists($coverPath)) {
-                unlink($coverPath);
-            }
+            $coverUrl = $_SESSION['quiz']['album_cover_url'];
+            $this->imageUploadService->delete($coverUrl);
         }
 
         // 2. Remove audio files (mp3) from questions
         if (!empty($_SESSION['quiz']['questions'])) {
             foreach ($_SESSION['quiz']['questions'] as $question) {
                 if (!empty($question['audio_url'])) {
-                    $audioPath = $publicDir . $question['audio_url'];
-                    if (file_exists($audioPath)) {
-                        unlink($audioPath);
-                    }
+                    $audioUrl = $question['audio_url'];
+                    $this->audioUploadService->delete($audioUrl);
                 }
             }
         }
