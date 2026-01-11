@@ -3,6 +3,7 @@
 require_once 'AppController.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 require_once __DIR__ . '/../middleware/AllowedMethods.php';
+require_once __DIR__ . '/../middleware/AllowedRules.php';
 
 class SecurityController extends AppController
 {

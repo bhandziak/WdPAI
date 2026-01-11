@@ -7,6 +7,7 @@ require_once 'src/controllers/QuizCreationController.php';
 
 require_once 'src/middleware/checkRequestAllowed.php';
 require_once 'src/middleware/checkRulesAllowed.php';
+require_once 'src/middleware/checkQuizSession.php';
 
 class Routing
 {
@@ -97,6 +98,7 @@ class Routing
 
             checkRequestAllowed($controllerObj, $action);
             checkRulesAllowed($controllerObj, $action);
+            checkQuizSession($controllerObj, $action);
 
             $controllerObj->$action();
         } catch (Exception $e) {

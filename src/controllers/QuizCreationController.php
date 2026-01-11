@@ -3,6 +3,8 @@
 require_once 'AppController.php';
 require_once __DIR__ . './../services/QuizService.php';
 require_once __DIR__ . '/../middleware/AllowedMethods.php';
+require_once __DIR__ . '/../middleware/AllowedRules.php';
+require_once __DIR__ . '/../middleware/QuizSessionRequired.php';
 
 class QuizCreationController extends AppController
 {
@@ -55,12 +57,9 @@ class QuizCreationController extends AppController
 
     #[AllowedMethods(['POST'])]
     #[AllowedRules(['user', 'admin'])]
+    #[QuizSessionRequired]
     public function addQuestionToQuiz()
     {
-        if (!isset($_SESSION['quiz'])) {
-            return $this->render('error', ['message' => 'No quiz in session']);
-        }
-
         // 1. Fetch data form
         $questionText = $_POST['question'] ?? null;
         if (!$questionText) {
@@ -140,13 +139,10 @@ class QuizCreationController extends AppController
     }
 
     #[AllowedRules(['user', 'admin'])]
+    #[QuizSessionRequired]
     public function cancelCreatingQuiz()
     {
         $publicDir = __DIR__ . '/../../public';
-
-        if (!isset($_SESSION['quiz'])) {
-            return $this->render('error', ['message' => 'Cann\'t cancel creating quiz. No quiz in session']);
-        }
 
         // 1. Remove cover image
         if (!empty($_SESSION['quiz']['coverUrl'])) {
@@ -176,18 +172,9 @@ class QuizCreationController extends AppController
     }
 
     #[AllowedRules(['user', 'admin'])]
+    #[QuizSessionRequired]
     public function saveQuiz()
     {
-        if (!isset($_SESSION['quiz'])) {
-            return $this->render(
-                'error',
-                [
-                    'message' => 'Cann\'t save quiz. No quiz in session'
-                ]
-            );
-            exit();
-        }
-
         try {
             $this->quizService->createQuiz($_SESSION['quiz']);
 
