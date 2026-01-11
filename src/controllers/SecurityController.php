@@ -44,9 +44,10 @@ class SecurityController extends AppController
         $userDetailsRow = $this->userRepository->getUserDetailsByName($username);
 
         // create user session
-
-        session_start();
-        session_regenerate_id(true);
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+            session_regenerate_id(true);
+        }
 
         // TODO map user without password
         $_SESSION['user'] = $userDetailsRow;
@@ -56,10 +57,9 @@ class SecurityController extends AppController
         exit;
     }
 
+    #[AllowedRules(['user', 'admin'])]
     public function logout()
     {
-        session_start();
-
         session_unset();
         session_destroy();
 
@@ -120,12 +120,9 @@ class SecurityController extends AppController
         return $this->render('login', ['messages' => 'User registered successfully. Please login.']);
     }
 
+    #[AllowedRules(['user', 'admin'])]
     public function refreshUserSession(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         if (!isset($_SESSION['user']['username'])) {
             return;
         }

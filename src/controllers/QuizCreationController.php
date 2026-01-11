@@ -14,10 +14,9 @@ class QuizCreationController extends AppController
     }
 
     #[AllowedMethods(['POST'])]
+    #[AllowedRules(['user', 'admin'])]
     public function createQuizStart()
     {
-        session_start();
-
         // validations
         $title = $_POST['title'] ?? null;
         if (!$title) {
@@ -55,10 +54,9 @@ class QuizCreationController extends AppController
     }
 
     #[AllowedMethods(['POST'])]
+    #[AllowedRules(['user', 'admin'])]
     public function addQuestionToQuiz()
     {
-        session_start();
-
         if (!isset($_SESSION['quiz'])) {
             return $this->render('error', ['message' => 'No quiz in session']);
         }
@@ -141,10 +139,10 @@ class QuizCreationController extends AppController
         }
     }
 
+    #[AllowedRules(['user', 'admin'])]
     public function cancelCreatingQuiz()
     {
         $publicDir = __DIR__ . '/../../public';
-        session_start();
 
         if (!isset($_SESSION['quiz'])) {
             return $this->render('error', ['message' => 'Cann\'t cancel creating quiz. No quiz in session']);
@@ -177,10 +175,9 @@ class QuizCreationController extends AppController
         exit();
     }
 
+    #[AllowedRules(['user', 'admin'])]
     public function saveQuiz()
     {
-        session_start();
-
         if (!isset($_SESSION['quiz'])) {
             return $this->render(
                 'error',

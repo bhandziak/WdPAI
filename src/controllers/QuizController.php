@@ -4,6 +4,7 @@ require_once 'AppController.php';
 require_once __DIR__ . './../repository/QuizRepository.php';
 require_once __DIR__ . './../repository/QuizResultRepository.php';
 require_once __DIR__ . '/../middleware/AllowedMethods.php';
+require_once __DIR__ . '/../middleware/AllowedRules.php';
 
 class QuizController extends AppController
 {
@@ -20,9 +21,9 @@ class QuizController extends AppController
     }
 
     #[AllowedMethods(['GET'])]
+    #[AllowedRules(['user', 'admin'])]
     public function index()
     {
-
         $search = $_GET['search'] ?? null;
 
         if ($search) {
@@ -36,21 +37,25 @@ class QuizController extends AppController
         ]);
     }
 
+    #[AllowedRules(['user', 'admin'])]
     public function redirectToCreateQuizForm()
     {
         return $this->render('makeQuiz/createQuiz');
     }
 
+    #[AllowedRules(['user', 'admin'])]
     public function redirectToAddQuestionForm()
     {
         return $this->render('makeQuiz/addQuestion');
     }
 
+    #[AllowedRules(['user', 'admin'])]
     public function redirectToQuizCreatedSuccess()
     {
         return $this->render('makeQuiz/createQuizSuccess');
     }
 
+    #[AllowedRules(['user', 'admin'])]
     public function playQuiz()
     {
         return $this->render('playQuiz/quizView');
