@@ -138,6 +138,7 @@ class QuizCreationController extends AppController
         }
     }
 
+    #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
     #[QuizSessionRequired]
     public function cancelCreatingQuiz()
@@ -171,6 +172,7 @@ class QuizCreationController extends AppController
         exit();
     }
 
+    #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
     #[QuizSessionRequired]
     public function saveQuiz()

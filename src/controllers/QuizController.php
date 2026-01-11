@@ -38,24 +38,28 @@ class QuizController extends AppController
         ]);
     }
 
+    #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
     public function redirectToCreateQuizForm()
     {
         return $this->render('makeQuiz/createQuiz');
     }
 
+    #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
     public function redirectToAddQuestionForm()
     {
         return $this->render('makeQuiz/addQuestion');
     }
 
+    #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
     public function redirectToQuizCreatedSuccess()
     {
         return $this->render('makeQuiz/createQuizSuccess');
     }
 
+    #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
     public function playQuiz()
     {

@@ -121,6 +121,7 @@ class SecurityController extends AppController
         return $this->render('login', ['messages' => 'User registered successfully. Please login.']);
     }
 
+    #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
     public function refreshUserSession(): void
     {
