@@ -103,8 +103,8 @@ class QuizController extends AppController
 
         // fetch other data (quizName, albumCoverUrl)
         $quizData = $this->quizRepository->getQuizContentById($quizId);
-        $quizTitle = $quizData['title'] ?? "";
-        $albumCoverUrl = $quizData['album_cover_url'] ?? null;
+        $quizTitle = $quizData->title;
+        $albumCoverUrl = $quizData->album_cover_url;
 
 
         // render

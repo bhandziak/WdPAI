@@ -2,6 +2,7 @@
 
 require_once 'Repository.php';
 require_once __DIR__ . './../mappers/QuizPreviewMapper.php';
+require_once __DIR__ . './../mappers/QuizContentMapper.php';
 
 class QuizRepository extends Repository
 {
@@ -73,7 +74,7 @@ class QuizRepository extends Repository
         return (int)$quizId;
     }
 
-    public function getQuizContentById(int $quizId): ?array
+    public function getQuizContentById(int $quizId): ?Quiz
     {
         $conn = $this->database->connect();
 
@@ -89,39 +90,6 @@ class QuizRepository extends Repository
             return null;
         }
 
-        $quiz = [
-            'id' => $rows[0]['quiz_id'],
-            'title' => $rows[0]['quiz_title'],
-            'album_cover_url' => $rows[0]['quiz_cover'],
-            'questions' => []
-        ];
-
-        $questionsMap = [];
-
-        foreach ($rows as $row) {
-            if ($row['question_id']) {
-
-                if (!isset($questionsMap[$row['question_id']])) {
-                    $questionsMap[$row['question_id']] = [
-                        'id' => $row['question_id'],
-                        'text' => $row['question_text'],
-                        'audio_url' => $row['question_audio'],
-                        'answers' => []
-                    ];
-                }
-
-                if ($row['answer_id']) {
-                    $questionsMap[$row['question_id']]['answers'][] = [
-                        'id' => $row['answer_id'],
-                        'text' => $row['answer_text'],
-                        'is_correct' => (bool)$row['answer_correct']
-                    ];
-                }
-            }
-        }
-
-        $quiz['questions'] = array_values($questionsMap);
-
-        return $quiz;
+        return QuizContentMapper::fromRows($rows);
     }
 }
