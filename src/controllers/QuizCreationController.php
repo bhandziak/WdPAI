@@ -2,6 +2,7 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . './../services/QuizService.php';
+require_once __DIR__ . '/../middleware/AllowedMethods.php';
 
 class QuizCreationController extends AppController
 {
@@ -12,12 +13,9 @@ class QuizCreationController extends AppController
         $this->quizService = new QuizService();
     }
 
+    #[AllowedMethods(['POST'])]
     public function createQuizStart()
     {
-        if (!$this->isPost()) {
-            return $this->render('error');
-        }
-
         session_start();
 
         // validations
@@ -48,7 +46,7 @@ class QuizCreationController extends AppController
         $_SESSION['quiz'] = [
             'title' => $title,
             'coverUrl' => $coverUrl,
-            'createdByUserId' => $_SESSION['user']['id'] ?? null,
+            'createdByUserId' => $_SESSION['user']['user_id'] ?? null,
             'currentQuestionNumber' => 1
         ];
 
@@ -56,12 +54,9 @@ class QuizCreationController extends AppController
         exit();
     }
 
+    #[AllowedMethods(['POST'])]
     public function addQuestionToQuiz()
     {
-        if (!$this->isPost()) {
-            return $this->render('error', ['message' => 'Invalid request method']);
-        }
-
         session_start();
 
         if (!isset($_SESSION['quiz'])) {

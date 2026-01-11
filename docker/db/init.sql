@@ -240,3 +240,13 @@ INSERT INTO answers (id, questionId, text, isCorrect) VALUES
 (23, 6, 'Another Brick in the Wall', FALSE),
 (24, 6, 'Us and Them', FALSE);
 
+
+-- UPDATE KEYS
+
+SELECT setval('quizzes_id_seq', (SELECT MAX(id) FROM quizzes));
+
+SELECT setval('questions_id_seq', (SELECT MAX(id) FROM questions));
+
+SELECT setval('answers_id_seq', (SELECT MAX(id) FROM answers));
+
+SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));

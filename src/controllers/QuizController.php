@@ -3,6 +3,7 @@
 require_once 'AppController.php';
 require_once __DIR__ . './../repository/QuizRepository.php';
 require_once __DIR__ . './../repository/QuizResultRepository.php';
+require_once __DIR__ . '/../middleware/AllowedMethods.php';
 
 class QuizController extends AppController
 {
@@ -18,11 +19,9 @@ class QuizController extends AppController
         $this->securityController = SecurityController::getInstance("SecurityController");
     }
 
+    #[AllowedMethods(['GET'])]
     public function index()
     {
-        if (!$this->isGet()) {
-            return $this->render('error');
-        }
 
         $search = $_GET['search'] ?? null;
 
@@ -57,6 +56,7 @@ class QuizController extends AppController
         return $this->render('playQuiz/quizView');
     }
 
+    // /api/quiz/finish
     public function finishQuiz()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -106,6 +106,7 @@ class QuizController extends AppController
         ]);
     }
 
+    // /api/quiz/details
     public function getQuizDetails()
     {
         if (!isset($_GET['id'])) {
