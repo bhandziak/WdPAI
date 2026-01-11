@@ -4,15 +4,18 @@ require_once 'AppController.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 require_once __DIR__ . '/../middleware/AllowedMethods.php';
 require_once __DIR__ . '/../middleware/AllowedRules.php';
+require_once __DIR__ . '/../services/SecurityValidationService.php';
 
 class SecurityController extends AppController
 {
 
     private $userRepository;
+    private $securityValidationService;
 
     public function __construct()
     {
         $this->userRepository = new UserRepository();
+        $this->securityValidationService = new SecurityValidationService($this->userRepository);
     }
 
 
@@ -24,21 +27,12 @@ class SecurityController extends AppController
             return $this->render('login');
         }
 
+        // validate login
         $username = $_POST['username'] ?? "";
-        $password = $_POST['password'] ?? "";
-
-        if (empty($username) || empty($password)) {
-            return $this->render('login', ['messages' => 'Fill all fields']);
-        }
-
-        $userRow = $this->userRepository->getUserByName($username);
-
-        if (!$userRow) {
-            return $this->render('login', ['messages' => 'User not found']);
-        }
-
-        if (!password_verify($password, $userRow['password_hash'])) {
-            return $this->render('login', ['messages' => 'Wrong password']);
+        try {
+            $userRow = $this->securityValidationService->validateLogin($_POST);
+        } catch (InvalidArgumentException $e) {
+            return $this->render('login', ['messages' => $e->getMessage()]);
         }
 
         // fetch user details
