@@ -6,6 +6,7 @@ require_once __DIR__ . '/../repository/UserRepository.php';
 class AdminController extends AppController
 {
     private UserRepository $userRepository;
+    private static $roles = ['user', 'admin'];
 
     public function __construct()
     {
@@ -21,7 +22,36 @@ class AdminController extends AppController
         $users = $this->userRepository->getUsersByText($search);
 
         return $this->render('admin', [
-            'users' => $users
+            'users' => $users,
+            'roles' => self::$roles
         ]);
     }
+
+    #[AllowedMethods(['PATCH', 'POST'])]
+    #[AllowedRules(['admin'])]
+    public function changeRole()
+    {
+        $userId = $_POST['user_id'] ?? null;
+        $newRole = $_POST['role'] ?? null;
+
+        if ($userId == $_SESSION['user']->getId()) {
+            throw new Exception('Can not change your role', 400);
+        }
+
+        try {
+            if ($userId && $newRole && in_array($newRole, self::$roles)) {
+                $this->userRepository->changeUserRole((int)$userId, $newRole);
+            }
+        } catch (Exception $e) {
+            throw new Exception('Error while changing role: ' . $e->getMessage(), 500);
+        }
+
+
+        header("Location: /admin");
+        exit;
+    }
+
+    #[AllowedMethods(['DELETE'])]
+    #[AllowedRules(['admin'])]
+    public function deleteUser() {}
 }

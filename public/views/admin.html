@@ -107,16 +107,16 @@ $users = $users ?? [];
                     </div>
 
                     <div class="form-wrapper">
-                        <form method="PATCH" action="/admin/change-role">
+                        <form method="POST" action="/admin/change-role">
                             <input type="hidden" name="user_id" value="<?= $user->getId() ?>">
 
-                            <select class="select-role" name="role" required>
-                                <option value="user" <?=$user->getRole() === 'user' ? 'selected' : '' ?>>
-                                    user
+                            <select class="select-role" name="role" required onchange="this.form.submit()">
+                                <?php foreach ($roles as $roleOption): ?>
+                                <option value="<?= $roleOption ?>" <?=$user->getRole() === $roleOption ? 'selected' : ''
+                                    ?>>
+                                    <?= $roleOption ?>
                                 </option>
-                                <option value="admin" <?=$user->getRole() === 'admin' ? 'selected' : '' ?>>
-                                    admin
-                                </option>
+                                <?php endforeach; ?>
                             </select>
                         </form>
 

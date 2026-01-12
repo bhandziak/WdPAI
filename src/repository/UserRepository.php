@@ -6,19 +6,6 @@ require_once __DIR__ . './../mappers/UserMapper.php';
 
 class UserRepository extends Repository
 {
-    public function getAllUsers(): ?array
-    {
-        $conn = $this->database->connect();
-
-        $query = $conn->prepare('SELECT * FROM user_data ORDER BY total_score DESC');
-        $query->execute();
-
-        $rows = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        $this->database->disconnect();
-        return UserMapper::fromRows($rows);
-    }
-
     public function getUsersByText(?string $search): ?array
     {
         $conn = $this->database->connect();
@@ -101,5 +88,18 @@ class UserRepository extends Repository
         $this->database->disconnect();
 
         return $user;
+    }
+
+    public function changeUserRole(int $userId, string $role): void
+    {
+        $conn = $this->database->connect();
+
+        $query = $conn->prepare('UPDATE users SET role = :role WHERE id = :id');
+        $query->bindParam(':role', $role, PDO::PARAM_STR);
+        $query->bindParam(':id', $userId, PDO::PARAM_INT);
+
+        $query->execute();
+
+        $this->database->disconnect();
     }
 }

@@ -91,6 +91,10 @@ class Routing
             "controller" => "AdminController",
             "action" => "index"
         ],
+        "admin/change-role" => [
+            "controller" => "AdminController",
+            "action" => "changeRole"
+        ],
     ];
 
     public static function run(string $path)
