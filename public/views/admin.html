@@ -120,7 +120,8 @@ $users = $users ?? [];
                             </select>
                         </form>
 
-                        <form method="DELETE" action="/admin/delete-user">
+                        <form method="POST" action="/admin/delete-user"
+                            onsubmit="return confirm('Are you sure you want to delete this user?');">
                             <input type="hidden" name="user_id" value="<?= $user->getId() ?>">
                             <button class="trash-bin" type="submit"></button>
                         </form>

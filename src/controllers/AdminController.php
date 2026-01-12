@@ -51,7 +51,25 @@ class AdminController extends AppController
         exit;
     }
 
-    #[AllowedMethods(['DELETE'])]
+    #[AllowedMethods(['DELETE', 'POST'])]
     #[AllowedRules(['admin'])]
-    public function deleteUser() {}
+    public function deleteUser()
+    {
+        $userId = $_POST['user_id'] ?? null;
+
+        if ($userId == $_SESSION['user']->getId()) {
+            throw new Exception('Cannot delete yourself', 400);
+        }
+
+        try {
+            if ($userId) {
+                $this->userRepository->deleteUser((int)$userId);
+            }
+        } catch (Exception $e) {
+            throw new Exception('Error while deleting user: ' . $e->getMessage(), 500);
+        }
+
+        header("Location: /admin");
+        exit;
+    }
 }

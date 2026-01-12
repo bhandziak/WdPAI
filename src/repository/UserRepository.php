@@ -102,4 +102,16 @@ class UserRepository extends Repository
 
         $this->database->disconnect();
     }
+
+    public function deleteUser(int $userId): void
+    {
+        $conn = $this->database->connect();
+
+        $query = $conn->prepare('DELETE FROM users WHERE id = :id');
+        $query->bindParam(':id', $userId, PDO::PARAM_INT);
+
+        $query->execute();
+
+        $this->database->disconnect();
+    }
 }

@@ -95,6 +95,10 @@ class Routing
             "controller" => "AdminController",
             "action" => "changeRole"
         ],
+        "admin/delete-user" => [
+            "controller" => "AdminController",
+            "action" => "deleteUser"
+        ],
     ];
 
     public static function run(string $path)

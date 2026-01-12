@@ -65,7 +65,6 @@ class SecurityController extends AppController
         exit;
     }
 
-    // walidacje w osobnym serwisie
     #[AllowedMethods(['POST', 'GET'])]
     public function register()
     {
