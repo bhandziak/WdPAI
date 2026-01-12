@@ -26,7 +26,13 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="main-text">TuneInQuiz</div>
         </div>
         <nav>
-            <a class="btn-link" href="/logout">Log out</a>
+            <div class="link-btn-wrapper">
+                <a class="btn-link header" href="/logout">Log out</a>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user']->getRole() === 'admin'): ?>
+                <a class="btn-link header" href="/admin">Admin</a>
+                <?php endif; ?>
+            </div>
+
             <div class="user-wrapper">
                 <img class="user-picture" />
                 <div class="user-info">
@@ -61,31 +67,31 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="quizzes-container">
 
                 <?php if (!empty($quizzes)): ?>
-                    <?php /** @var QuizPreview[] $quizzes */
+                <?php /** @var QuizPreview[] $quizzes */
                     foreach ($quizzes as $quiz):
                     ?>
-                        <a href="/play_quiz?id=<?= $quiz->getId() ?>" class="quiz-tile">
-                            <img class="quiz-tile-album-cover" src="
+                <a href="/play_quiz?id=<?= $quiz->getId() ?>" class="quiz-tile">
+                    <img class="quiz-tile-album-cover" src="
                         <?php if (!empty($quiz->getAlbumCoverUrl())): ?>
                             <?= 'http://localhost:8080/public' . $quiz->getAlbumCoverUrl() ?>
                         <?php else: ?>
                             <?= 'http://localhost:8080/public/images/cover/default.png' ?>
                         <?php endif; ?>" alt="<?= $quiz->getTitle() ?>" />
 
-                            <div class="quiz-tile-title">
-                                <?= $quiz->getTitle() ?>
-                            </div>
-
-                            <div class="quiz-tile-subtitle">
-                                by
-                                <?= $quiz->getCreatedByUsername() ?? '' ?>
-                            </div>
-                        </a>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="empty-state">
-                        No quizzes found
+                    <div class="quiz-tile-title">
+                        <?= $quiz->getTitle() ?>
                     </div>
+
+                    <div class="quiz-tile-subtitle">
+                        by
+                        <?= $quiz->getCreatedByUsername() ?? '' ?>
+                    </div>
+                </a>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <div class="empty-state">
+                    No quizzes found
+                </div>
                 <?php endif; ?>
 
             </div>

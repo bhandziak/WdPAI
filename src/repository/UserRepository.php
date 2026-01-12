@@ -2,21 +2,42 @@
 
 require_once 'Repository.php';
 require_once __DIR__ . './../models/User.php';
+require_once __DIR__ . './../mappers/UserMapper.php';
 
 class UserRepository extends Repository
 {
-
-    public function getAllUsersDetails(): ?array
+    public function getAllUsers(): ?array
     {
         $conn = $this->database->connect();
 
         $query = $conn->prepare('SELECT * FROM user_data ORDER BY total_score DESC');
         $query->execute();
 
-        $users = $query->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 
         $this->database->disconnect();
-        return $users;
+        return UserMapper::fromRows($rows);
+    }
+
+    public function getUsersByText(?string $search): ?array
+    {
+        $conn = $this->database->connect();
+
+        $query = $conn->prepare(
+            'SELECT *
+             FROM user_data
+             WHERE username ILIKE :search
+                OR email ILIKE :search
+             ORDER BY total_score DESC'
+        );
+
+        $query->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+        $query->execute();
+
+        $rows = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->database->disconnect();
+        return UserMapper::fromRows($rows);
     }
 
     public function createUser(

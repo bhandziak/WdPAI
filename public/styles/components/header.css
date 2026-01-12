@@ -62,7 +62,7 @@ nav {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url("https://plus.unsplash.com/premium_photo-1689977927774-401b12d137d6?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFuJTIwcHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D");
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/0/03/Twitter_default_profile_400x400.png");
 }
 
 .user-info {
@@ -90,6 +90,13 @@ nav {
     cursor: pointer;
 }
 
+.link-btn-wrapper {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    gap: 0.2em;
+    flex-wrap: wrap;
+}
 
 @media (max-width: 768px) {
 

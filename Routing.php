@@ -8,6 +8,7 @@ require_once 'src/controllers/QuizCreationController.php';
 require_once 'src/middleware/checkRequestAllowed.php';
 require_once 'src/middleware/checkRulesAllowed.php';
 require_once 'src/middleware/checkQuizSession.php';
+require_once 'src/controllers/AdminController.php';
 
 class Routing
 {
@@ -83,6 +84,12 @@ class Routing
         "api/quiz/finish" => [
             "controller" => "QuizController",
             "action" => "finishQuiz"
+        ],
+
+        // ADMIN
+        "admin" => [
+            "controller" => "AdminController",
+            "action" => "index"
         ],
     ];
 

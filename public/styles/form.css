@@ -28,6 +28,12 @@ a.btn-link:active {
     filter: brightness(0.9);
 }
 
+a.btn-link.header {
+    padding: 0.5em 1em;
+    line-height: 1;
+    font-size: 1em;
+}
+
 /* --- FORM --- */
 
 form {
@@ -86,4 +92,10 @@ select option {
     color: #a54ef8;
     text-align: center;
     font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    a.btn-link.header {
+        font-size: 0.7em;
+    }
 }
