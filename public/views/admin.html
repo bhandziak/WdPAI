@@ -106,7 +106,7 @@ $users = $users ?? [];
                         </div>
                     </div>
 
-                    <div class="form-wrapper">
+                    <div class="form-wrapper <?= $_SESSION['user']->getId() === $user->getId() ? 'hidden' : '' ?>">
                         <form method="POST" action="/admin/change-role">
                             <input type="hidden" name="user_id" value="<?= $user->getId() ?>">
 

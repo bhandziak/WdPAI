@@ -67,6 +67,10 @@
     background-size: 1.5em;
 }
 
+.form-wrapper.hidden {
+    visibility: hidden;
+}
+
 .form-wrapper {
     display: flex;
     text-align: center;
