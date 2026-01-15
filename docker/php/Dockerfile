@@ -35,3 +35,17 @@ RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.in
 COPY . /app
 
 VOLUME ["/app"]
+
+# TESTS
+
+WORKDIR /app
+
+# Install Composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && php -r "unlink('composer-setup.php');"
+
+# Install PHPUnit globally
+RUN composer global require phpunit/phpunit --prefer-dist
+
+ENV PATH="$PATH:/root/.composer/vendor/bin"
