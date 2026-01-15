@@ -126,6 +126,7 @@ SELECT
     q.id AS quiz_id,
     q.title AS quiz_title,
     q.album_cover_url AS quiz_cover,
+    q.created_by AS owner_id,
 
     qs.id AS question_id,
     qs.text AS question_text,

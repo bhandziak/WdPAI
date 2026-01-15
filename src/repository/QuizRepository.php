@@ -74,6 +74,18 @@ class QuizRepository extends Repository
         return (int)$quizId;
     }
 
+    public function deleteQuiz(int $quizId): void
+    {
+        $conn = $this->database->connect();
+
+        $stmt = $conn->prepare(
+            "DELETE FROM quizzes WHERE id = :quiz_id"
+        );
+        $stmt->execute([':quiz_id' => $quizId]);
+
+        $this->database->disconnect();
+    }
+
     public function getQuizContentById(int $quizId): ?Quiz
     {
         $conn = $this->database->connect();

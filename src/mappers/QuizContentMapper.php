@@ -12,6 +12,7 @@ class QuizContentMapper
             id: (int)$rows[0]['quiz_id'],
             title: $rows[0]['quiz_title'],
             album_cover_url: $rows[0]['quiz_cover'],
+            owner_id: $rows[0]['owner_id'],
             questions: []
         );
 

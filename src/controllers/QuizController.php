@@ -16,11 +16,22 @@ class QuizController extends AppController
     private QuizResultRepository $quizResultRepository;
     private SecurityController $securityController;
 
+    private UploadService $imageUploadService;
+    private UploadService $audioUploadService;
+
     public function __construct()
     {
         $this->quizRepository = new QuizRepository();
         $this->quizResultRepository = new QuizResultRepository();
         $this->securityController = SecurityController::getInstance("SecurityController");
+        $this->imageUploadService = new UploadService(
+            __DIR__ . '/../../public/uploads/albumCover/',
+            '/uploads/albumCover/'
+        );
+        $this->audioUploadService = new UploadService(
+            __DIR__ . '/../../public/uploads/audio/',
+            '/uploads/audio/'
+        );
     }
 
     #[AllowedMethods(['GET'])]
@@ -38,6 +49,57 @@ class QuizController extends AppController
         return $this->render('home', [
             'quizzes' => $quizzes ?? []
         ]);
+    }
+
+    #[AllowedMethods(['DELETE', 'POST'])]
+    #[AllowedRules(['user', 'admin'])]
+    public function deleteQuiz()
+    {
+        $quizId = $_POST['quizId'] ?? null;
+
+        if (!$quizId) {
+            throw new Exception("QuizId cant be null", 400);
+        }
+
+        $quiz = $this->quizRepository->getQuizContentById($quizId);
+
+        if (!$quiz) {
+            throw new Exception("Quiz not found", 400);
+        }
+
+        // only admin or owner can delete quiz
+        $userId = $_SESSION['user']->getId();
+        $userRole = $_SESSION['user']->getRole();
+
+        if ($userRole !== 'admin' && $quiz->owner_id !== $userId) {
+            throw new Exception("Forbidden", 403);
+        }
+
+        // delete linked files
+        if (!empty($quiz->album_cover_url)) {
+            $this->imageUploadService->delete(
+                $quiz->album_cover_url
+            );
+        }
+
+        $questions = $quiz->questions;
+
+        foreach ($questions as $question) {
+            if (!empty($question->audio_url)) {
+                $this->audioUploadService->delete(
+                    $question->audio_url
+                );
+            }
+        }
+
+        try {
+            $this->quizRepository->deleteQuiz($quizId);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), 500);
+        }
+
+        header("Location: /home");
+        exit;
     }
 
     #[AllowedMethods(['GET'])]

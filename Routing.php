@@ -70,6 +70,12 @@ class Routing
             "action" => "redirectToQuizCreatedSuccess"
         ],
 
+        // DELETE QUIZ
+        "delete_quiz" => [
+            "controller" => "QuizController",
+            "action" => "deleteQuiz"
+        ],
+
         // PLAY QUIZ
         "play_quiz" => [
             "controller" => "QuizController",
