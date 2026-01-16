@@ -5,6 +5,20 @@ class AppController
 {
     private static array $instances = [];
 
+    private function __construct()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_set_cookie_params([
+                'lifetime' => 0,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);
+            session_start();
+        }
+    }
+
     public static function getInstance(string $controllerClass): self
     {
         if (!isset(self::$instances[$controllerClass])) {

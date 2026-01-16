@@ -41,8 +41,8 @@ class SecurityController extends AppController
         // create user session
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
-            session_regenerate_id(true);
         }
+        session_regenerate_id(true);
 
         // TODO map user without password
         $_SESSION['user'] = $userDetailsRow;
