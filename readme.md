@@ -263,6 +263,12 @@ Sprawdzenie poprawności działania systemu quizów w zakresie:
 - Usuwanie quizu
 
 ---
+### Komunikacja frontend–backend (Fetch API)
+- Zastosowanie **Fetch API** do komunikacji frontend ↔ backend
+- Endpoint REST: `GET /api/quiz/details`
+- Endpoint REST: `POST /api/quiz/finish`
+
+---
 
 ### Relacje
 - Relacja **1 : 1** – `users` → `user_details`
