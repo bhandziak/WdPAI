@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../../src/repository/UserRepository.php';
 require_once __DIR__ . '/../../src/repository/Repository.php';
+require_once __DIR__ . '/../../Database.php';
+require_once __DIR__ . './../../src/controllers/ErrorController.php';
 
 class UserRepositoryTest extends TestCase
 {
@@ -25,8 +27,8 @@ class UserRepositoryTest extends TestCase
             ->willReturn($this->mockStatement);
 
         // Mock Database
-        $this->mockDatabase = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['connect', 'disconnect'])
+        $this->mockDatabase = $this->getMockBuilder(Database::class)
+            ->onlyMethods(['connect', 'disconnect'])
             ->getMock();
         $this->mockDatabase
             ->method('connect')
@@ -37,7 +39,9 @@ class UserRepositoryTest extends TestCase
 
         // Repository z mock DB
         $this->userRepository = new UserRepository();
-        $this->userRepository->database = $this->mockDatabase;
+        $reflection = new ReflectionProperty(UserRepository::class, 'database');
+        $reflection->setAccessible(true);
+        $reflection->setValue($this->userRepository, $this->mockDatabase);
     }
 
     public function testCreateUserExecutesQuery(): void
