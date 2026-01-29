@@ -11,7 +11,13 @@ class QuizGame {
 
     async start() {
         const quizId = this.quizId;
-        this.quiz = await this.api.getQuizById(quizId);
+
+        try {
+            this.quiz = await this.api.getQuizById(quizId);
+        } catch (error) {
+            alert(error.message);
+            window.location.href = '/home';
+        }
         console.log(this.quiz);
 
         this.setUpUI();
