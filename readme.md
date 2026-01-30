@@ -1,5 +1,4 @@
-# Tytuł aplikacji
-Tune In Quiz <br/>
+# Tune In Quiz
 Edukacja
 
 ## Opis Aplikacji
@@ -36,6 +35,9 @@ Play Quiz
 
 Quiz Result
 ![Alt text](docs/resultView.png "Quiz Result")
+
+Edit Quiz
+![Alt text](docs/editQuizView.PNG "Edit Quiz")
 
 Admin Page
 ![Alt text](docs/adminView.png "Admin page")
@@ -178,7 +180,7 @@ Sprawdzenie poprawności działania systemu quizów w zakresie:
 ---
 
 ### 8. Usunięcie quizu
-- Właściciel quizu usuwa swój quiz
+- Właściciel quizu lub admin usuwa swój quiz
 
 **Oczekiwany rezultat:**
 - Quiz zostaje usunięty
@@ -189,7 +191,18 @@ Sprawdzenie poprawności działania systemu quizów w zakresie:
 
 ---
 
-### 9. Panel administratora
+### 9. Edytowanie quizu
+- Właściciel quizu lub admin edytuje swój quiz
+
+**Oczekiwany rezultat:**
+- Quiz zostaje zmieniony
+
+**Błąd:**
+- Próba usunięcia edycji przez innego użytkownika → **403 Forbidden**
+
+---
+
+### 10. Panel administratora
 - Administrator przechodzi na `/admin`
 
 **Oczekiwany rezultat:**
@@ -201,7 +214,7 @@ Sprawdzenie poprawności działania systemu quizów w zakresie:
 
 ---
 
-### 10. Zmiana roli użytkownika
+### 11. Zmiana roli użytkownika
 - Administrator zmienia rolę innego użytkownika
 
 **Oczekiwany rezultat:**
@@ -261,12 +274,14 @@ Sprawdzenie poprawności działania systemu quizów w zakresie:
 - Rozgrywanie quizu
 - Zapis wyniku quizu
 - Usuwanie quizu
+- Edycja quizu
 
 ---
 ### Komunikacja frontend–backend (Fetch API)
 - Zastosowanie **Fetch API** do komunikacji frontend ↔ backend
 - Endpoint REST: `GET /api/quiz/details`
 - Endpoint REST: `POST /api/quiz/finish`
+- Endpoint REST: `POST /api/quiz/update`
 
 ---
 
