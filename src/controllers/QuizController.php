@@ -18,6 +18,7 @@ class QuizController extends AppController
 
     private UploadService $imageUploadService;
     private UploadService $audioUploadService;
+    private QuizService $quizService;
 
     public function __construct()
     {
@@ -32,6 +33,7 @@ class QuizController extends AppController
             __DIR__ . '/../../public/uploads/audio/',
             '/uploads/audio/'
         );
+        $this->quizService = new QuizService();
     }
 
     #[AllowedMethods(['GET'])]
@@ -130,6 +132,14 @@ class QuizController extends AppController
         return $this->render('playQuiz/quizView');
     }
 
+    #[AllowedMethods(['GET'])]
+    #[AllowedRules(['user', 'admin'])]
+    public function redirectToQuizView()
+    {
+        return $this->render('makeQuiz/editQuiz');
+    }
+
+
     // /api/quiz/finish
     #[AllowedMethods(['POST'])]
     #[AllowedRules(['user', 'admin'])]
@@ -195,6 +205,30 @@ class QuizController extends AppController
 
         header('Content-Type: application/json');
         echo json_encode($quiz);
+        exit;
+    }
+
+    // /api/quiz/update
+    #[AllowedMethods(['POST'])]
+    #[AllowedRules(['user', 'admin'])]
+    public function updateQuiz()
+    {
+        $quizId = $_POST['quizId'] ?? null;
+
+        if (!$quizId) {
+            http_response_code(400);
+            exit;
+        }
+
+        try {
+            $this->quizService->updateQuizFromForm($quizId, $_POST);
+        } catch (Exception $e) {
+            $code = $e->getCode() ?: 500;
+            http_response_code($code);
+            echo $e->getMessage();
+        }
+
+        http_response_code(200);
         exit;
     }
 }

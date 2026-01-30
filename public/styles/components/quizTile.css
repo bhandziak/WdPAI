@@ -12,13 +12,15 @@
 }
 
 .quiz-tile {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.quiz-tile-wrapper {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    cursor: pointer;
     margin: 2em;
-
-    text-decoration: none;
     color: #fff;
 }
 
@@ -61,4 +63,16 @@
     background-position: center;
     background-color: transparent;
     background-size: 1.5em;
+}
+
+.edit-icon {
+    background-image: url("./../../images/icons/edit_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    background-size: 1.5em;
+}
+
+.crud-btn-wrapper {
+    display: flex;
 }

@@ -22,4 +22,18 @@ class QuestionRepository extends Repository
 
         return (int)$questionId;
     }
+
+    public function updateQuestionText(PDO $conn, int $questionId, string $text): void
+    {
+        $stmt = $conn->prepare("
+            UPDATE questions
+            SET text = :text
+            WHERE id = :question_id
+        ");
+
+        $stmt->execute([
+            ':text' => $text,
+            ':question_id' => $questionId
+        ]);
+    }
 }

@@ -1,0 +1,83 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/styles/main.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/home.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/createQuiz.css" />
+    <link rel="stylesheet" type="text/css" href="/public/styles/editQuiz.css" />
+    <script src="/public/scripts/home/toggleMenuBar.js" defer></script>
+    <script src="/public/scripts/editQuiz/editQuiz.js" defer></script>
+    <title>Edit quiz</title>
+</head>
+
+<body>
+    <header>
+        <button class="menu-toggle">&#9776;</button>
+
+        <div class="logo-wrapper">
+            <div class="brand-icon">🎵</div>
+            <div class="main-text">TuneInQuiz</div>
+        </div>
+        <nav>
+            <a class="btn-link" href="/logout">Log out</a>
+            <div class="user-wrapper">
+                <img class="user-picture" />
+                <div class="user-info">
+                    <div class="user-name">
+                        <?= $_SESSION['user']->getUsername() ?? '' ?>
+                    </div>
+                    <div class="user-datails">
+                        <?= $_SESSION['user']->getRole() ?? '' ?>
+                    </div>
+                    <div class="user-datails">
+                        score :
+                        <?= $_SESSION['user']->getTotalScore() ?? '0' ?>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="home-content center">
+            <div class="form-content">
+                <div>
+                    <div class="main-text">Edit Quiz</div>
+                    <div class="description-text">Update title, questions, answers</div>
+                </div>
+
+
+                <form class="quiz-form">
+
+                    <div id="quiz-form-body">
+                        <!-- Form dynamically generated  -->
+                    </div>
+
+                    <div class="btn-wrapper-outside">
+                        <div class="btn-wrapper-inside">
+                            <a class="btn-link nav-btn" href="/home">Go back</a>
+                            <button class="nav-btn" type="submit">Save changes</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+
+    </main>
+</body>
+
+</html>

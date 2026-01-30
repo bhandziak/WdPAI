@@ -43,4 +43,37 @@ class QuizService
             throw $err;
         }
     }
+
+    public function updateQuizFromForm(int $quizId, array $data)
+    {
+        $conn = $this->database->connect();
+        $conn->beginTransaction();
+
+        try {
+            // title
+            $this->quizRepo->updateQuizTitle($conn, $quizId, $data['title']);
+
+            foreach ($data['questions'] as $q) {
+                // question
+                $this->questionRepo->updateQuestionText($conn, $q['id'], $q['text']);
+
+                // answers
+                foreach ($q['answers'] as $a) {
+                    $this->answerRepo->updateAnswerText($conn, $a['id'], $a['text']);
+                }
+
+                // correct answer
+                $this->answerRepo->setCorrectAnswer(
+                    $conn,
+                    $q['id'],
+                    $q['answers'][$q['correct']]['id']
+                );
+            }
+
+            $conn->commit();
+        } catch (Exception $e) {
+            $conn->rollBack();
+            throw $e;
+        }
+    }
 }

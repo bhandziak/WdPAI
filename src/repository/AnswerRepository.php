@@ -17,4 +17,37 @@ class AnswerRepository extends Repository
             ':is_correct' => $answer['is_correct'] ? 1 : 0
         ]);
     }
+
+    public function updateAnswerText(PDO $conn, int $answerId, string $text): void
+    {
+        $stmt = $conn->prepare("
+            UPDATE answers
+            SET text = :text
+            WHERE id = :answer_id
+        ");
+
+        $stmt->execute([
+            ':text' => $text,
+            ':answer_id' => $answerId
+        ]);
+    }
+
+    public function setCorrectAnswer(PDO $conn, int $questionId, int $correctAnswerId): void
+    {
+        // reset
+        $stmt = $conn->prepare("
+            UPDATE answers
+            SET is_correct = false
+            WHERE question_id = :question_id
+        ");
+        $stmt->execute([':question_id' => $questionId]);
+
+        // set correct
+        $stmt = $conn->prepare("
+            UPDATE answers
+            SET is_correct = true
+            WHERE id = :answer_id
+        ");
+        $stmt->execute([':answer_id' => $correctAnswerId]);
+    }
 }

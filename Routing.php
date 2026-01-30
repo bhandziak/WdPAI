@@ -76,6 +76,12 @@ class Routing
             "action" => "deleteQuiz"
         ],
 
+        // EDIT QUIZ
+        "edit_quiz" => [
+            "controller" => "QuizController",
+            "action" => "redirectToQuizView"
+        ],
+
         // PLAY QUIZ
         "play_quiz" => [
             "controller" => "QuizController",
@@ -90,6 +96,10 @@ class Routing
         "api/quiz/finish" => [
             "controller" => "QuizController",
             "action" => "finishQuiz"
+        ],
+        "api/quiz/update" => [
+            "controller" => "QuizController",
+            "action" => "updateQuiz"
         ],
 
         // ADMIN

@@ -55,6 +55,25 @@ class QuizRepository extends Repository
         );
     }
 
+    public function getQuizContentById(int $quizId): ?Quiz
+    {
+        $conn = $this->database->connect();
+
+        $stmt = $conn->prepare("
+            SELECT * FROM quiz_content
+            WHERE quiz_id = :quiz_id
+        ");
+
+        $stmt->execute([':quiz_id' => $quizId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($rows)) {
+            return null;
+        }
+
+        return QuizContentMapper::fromRows($rows);
+    }
+
     public function createQuiz(PDO $conn, array $quiz): int
     {
         $stmt = $conn->prepare("
@@ -74,6 +93,20 @@ class QuizRepository extends Repository
         return (int)$quizId;
     }
 
+    public function updateQuizTitle(PDO $conn, int $quizId, string $title): void
+    {
+        $stmt = $conn->prepare("
+            UPDATE quizzes
+            SET title = :title
+            WHERE id = :quiz_id
+        ");
+
+        $stmt->execute([
+            ':title' => $title,
+            ':quiz_id' => $quizId
+        ]);
+    }
+
     public function deleteQuiz(int $quizId): void
     {
         $conn = $this->database->connect();
@@ -84,24 +117,5 @@ class QuizRepository extends Repository
         $stmt->execute([':quiz_id' => $quizId]);
 
         $this->database->disconnect();
-    }
-
-    public function getQuizContentById(int $quizId): ?Quiz
-    {
-        $conn = $this->database->connect();
-
-        $stmt = $conn->prepare("
-            SELECT * FROM quiz_content
-            WHERE quiz_id = :quiz_id
-        ");
-
-        $stmt->execute([':quiz_id' => $quizId]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($rows)) {
-            return null;
-        }
-
-        return QuizContentMapper::fromRows($rows);
     }
 }
