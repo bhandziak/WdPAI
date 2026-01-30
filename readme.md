@@ -179,7 +179,18 @@ Sprawdzenie poprawności działania systemu quizów w zakresie:
 
 ---
 
-### 8. Usunięcie quizu
+### 8. Edytowanie quizu
+- Właściciel quizu lub admin edytuje swój quiz
+
+**Oczekiwany rezultat:**
+- Quiz zostaje zmieniony
+
+**Błąd:**
+- Próba usunięcia edycji przez innego użytkownika → **403 Forbidden**
+
+---
+
+### 9. Usunięcie quizu
 - Właściciel quizu lub admin usuwa swój quiz
 
 **Oczekiwany rezultat:**
@@ -188,17 +199,6 @@ Sprawdzenie poprawności działania systemu quizów w zakresie:
 
 **Błąd:**
 - Próba usunięcia quizu przez innego użytkownika → **403 Forbidden**
-
----
-
-### 9. Edytowanie quizu
-- Właściciel quizu lub admin edytuje swój quiz
-
-**Oczekiwany rezultat:**
-- Quiz zostaje zmieniony
-
-**Błąd:**
-- Próba usunięcia edycji przez innego użytkownika → **403 Forbidden**
 
 ---
 
@@ -223,6 +223,17 @@ Sprawdzenie poprawności działania systemu quizów w zakresie:
 
 **Błąd:**
 - Próba zmiany własnej roli → **400 Bad Request**
+
+---
+
+### 12. Usunięcie użytkownika
+- Administrator usuwa wybranego użytkownika
+
+**Oczekiwany rezultat:**
+- Użytkownik zostaje usunięty wraz powiązanymi zasobami (np. wyniki, stworzone quizu)
+
+**Błąd:**
+- Próba usunięcia samego siebie → **400 Bad Request**
 
 ---
 

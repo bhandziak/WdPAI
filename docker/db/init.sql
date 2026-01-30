@@ -187,23 +187,32 @@ SELECT create_user(
     'rock'
 );
 
+SELECT create_user(
+    'user',
+    '$2a$12$9mWIpC1avGSNX7gtgA7EyeVpFTUAJ90Zng6A9yIEG9F1iPlwW6uK.',
+    'user',
+    'user@quizmusic.local',
+    'rock'
+);
+
 INSERT INTO quizzes (id, title, album_cover_url, created_by)
 VALUES (1, 'The Doors', '/images/cover/thedoors.jpg', 1);
 INSERT INTO quizzes (id, title, album_cover_url, created_by)
 VALUES (2, 'Pink Floyd', NULL, 1);
 
 INSERT INTO questions (id, quiz_id, text, audio_url) VALUES
-(1, 1, 'Który utwór The Doors otwiera ich debiutancki album?', '/audio/light_my_fire.mp3'),
-(2, 1, 'W którym utworze The Doors możemy usłyszeć słowa "Riders on the storm"?', '/audio/riders_on_the_storm.mp3'),
-(3, 1, 'Który utwór The Doors pochodzi z albumu "The Doors" i jest jednym z ich pierwszych hitów?', '/audio/soul_kitchen.mp3'),
-(4, 2, 'W którym utworze Pink Floyd znajdziemy charakterystyczny śpiew dzieci w refrenie?', '/audio/another_brick_in_the_wall.mp3'),
-(5, 2, 'Który utwór Pink Floyd ma słynną gitarową melodię instrumentalną?', '/audio/any_colour_you_like.mp3'),
-(6, 2, 'W którym utworze Pink Floyd czas jest centralnym motywem tekstu?', '/audio/time.mp3');
+(1, 1, 'W którym utworze The Doors solo organowe Raya Manzarka zostało oparte na strukturze barokowej, inspirowanej Bachem?', '/audio/light_my_fire.mp3'),
+(2, 1, 'Który utwór był ostatnim nagranym wspólnie przez czterech członków zespołu?', '/audio/riders_on_the_storm.mp3'),
+(3, 1, 'Który utwór jest hołdem dla restauracji "Olivia’s" w Venice Beach, gdzie Jim Morrison często przesiadywał do późnej nocy?', '/audio/soul_kitchen.mp3'),
+
+(4, 2, 'W którym utworze wykorzystano chór uczniów z Islington Green School, co wywołało skandal w ówczesnym brytyjskim systemie szkolnictwa?', '/audio/another_brick_in_the_wall.mp3'),
+(5, 2, 'Który instrumentalny utwór z albumu "Dark Side of the Moon" jest pokazem możliwości syntezatora VCS3 i efektów Uni-Vibe Davida Gilmoura?', '/audio/any_colour_you_like.mp3'),
+(6, 2, 'Który utwór otwiera słynna kakofonia zegarów, nagrana przez Alana Parsonsa w antykwariacie przy użyciu techniki quadrophonic?', '/audio/time.mp3');
 
 INSERT INTO answers (id, question_id, text, is_correct) VALUES
-(1, 1, 'Light My Fire', TRUE),
+(1, 1, 'Riders on the Storm', FALSE),
 (2, 1, 'Soul Kitchen', FALSE),
-(3, 1, 'Riders on the Storm', FALSE),
+(3, 1, 'Light My Fire', TRUE),
 (4, 1, 'The End', FALSE),
 
 (5, 2, 'Riders on the Storm', TRUE),
@@ -211,10 +220,10 @@ INSERT INTO answers (id, question_id, text, is_correct) VALUES
 (7, 2, 'Soul Kitchen', FALSE),
 (8, 2, 'Break on Through', FALSE),
 
-(9, 3, 'Soul Kitchen', TRUE),
+(9, 3, 'People Are Strange', FALSE),
 (10, 3, 'The End', FALSE),
 (11, 3, 'Light My Fire', FALSE),
-(12, 3, 'People Are Strange', FALSE),
+(12, 3, 'Soul Kitchen', TRUE),
 
 (13, 4, 'Another Brick in the Wall', TRUE),
 (14, 4, 'Time', FALSE),
@@ -226,10 +235,10 @@ INSERT INTO answers (id, question_id, text, is_correct) VALUES
 (19, 5, 'Time', FALSE),
 (20, 5, 'Shine On You Crazy Diamond', FALSE),
 
-(21, 6, 'Time', TRUE),
+(21, 6, 'People Are Strange', FALSE),
 (22, 6, 'Brain Damage', FALSE),
 (23, 6, 'Another Brick in the Wall', FALSE),
-(24, 6, 'Us and Them', FALSE);
+(24, 6, 'Time', TRUE);
 
 
 -- UPDATE KEYS
