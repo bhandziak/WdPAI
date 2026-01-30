@@ -1,104 +1,93 @@
-const quizId = new URLSearchParams(window.location.search).get('id');
+class EditQuiz {
+    constructor(formElement, containerElement, quizId) {
+        this.form = formElement;
+        this.container = containerElement;
+        this.quizId = quizId;
+    }
 
-fetch(`/api/quiz/details?id=${quizId}`)
-    .then(res => res.json())
-    .then(quiz => renderQuizForm(quiz))
-    .catch((e) => alert("Failed to load quiz" + e));
+    init() {
+        if (!this.quizId || !this.form || !this.container) {
+            console.error("EditQuiz: Missing required elements or quizId.");
+            return;
+        }
 
-function escapeHtml(text) {
-    if (typeof text !== "string") return text;
+        this.fetchQuizData();
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
 
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
+    escapeHtml(text) {
+        if (typeof text !== "string") return text;
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
+    fetchQuizData() {
+        fetch(`/api/quiz/details?id=${this.quizId}`)
+            .then(res => res.json())
+            .then(quiz => this.renderQuizForm(quiz))
+            .catch(e => alert("Failed to load quiz: " + e));
+    }
 
-function renderQuizForm(quiz) {
-    const form = document.getElementById('quiz-form-body');
+    renderQuizForm(quiz) {
+        let html = `
+            <label>Quiz title</label>
+            <input name="title" value="${this.escapeHtml(quiz.title)}" required>
+        `;
 
-    form.innerHTML = `
-        <label>Quiz title</label>
-        <input name="title" value="${escapeHtml(quiz.title)}" required>
-    `;
+        quiz.questions.forEach((q, qi) => {
+            html += this.renderQuestion(q, qi);
+        });
 
-    quiz.questions.forEach((q, qi) => {
-        form.innerHTML += renderQuestion(q, qi);
-    });
-}
+        this.container.innerHTML = html;
+    }
 
-function renderQuestion(q, qi) {
-    return `
-        <fieldset>
-            <legend>Question ${qi + 1}</legend>
+    renderQuestion(q, qi) {
+        return `
+            <fieldset>
+                <legend>Question ${qi + 1}</legend>
+                <input name="questions[${qi}][id]" type="hidden" value="${q.id}">
+                <label>Question text</label>
+                <input name="questions[${qi}][text]" value="${this.escapeHtml(q.text)}" required>
+                ${this.renderAnswers(q.answers, qi)}
+            </fieldset>
+        `;
+    }
 
-            <input
-                name="questions[${qi}][id]"
-                type="hidden"
-                value="${q.id}"
-            >
+    renderAnswers(answers, qi) {
+        return answers.map((a, ai) => `
+            <div class="answer-container">
+                <input type="hidden" name="questions[${qi}][answers][${ai}][id]" value="${a.id}">
+                <input name="questions[${qi}][answers][${ai}][text]" value="${this.escapeHtml(a.text)}" required>
+                <label class="radio-container">
+                    <input type="radio" name="questions[${qi}][correct]" value="${ai}" ${a.is_correct ? 'checked' : ''}>
+                    correct
+                </label>
+            </div>
+        `).join('');
+    }
 
-            <label>Question text</label>
-            <input
-                name="questions[${qi}][text]"
-                value="${escapeHtml(q.text)}"
-                required
-            >
-
-            ${renderAnswers(q.answers, qi)}
-        </fieldset>
-    `;
-}
-
-function renderAnswers(answers, qi) {
-    return answers.map((a, ai) => `
-        <div class="answer-container">
-            <input type="hidden"
-                name="questions[${qi}][answers][${ai}][id]"
-                value="${a.id}"
-            >
-
-            <input
-                name="questions[${qi}][answers][${ai}][text]"
-                value="${escapeHtml(a.text)}"
-                required
-            >
-
-            <label class="radio-container">
-                <input
-                    type="radio"
-                    name="questions[${qi}][correct]"
-                    value="${ai}"
-                    ${a.is_correct ? 'checked' : ''}
-                >
-                correct
-            </label>
-        </div>
-    `).join('');
-}
-
-document
-    .querySelector('.quiz-form')
-    .addEventListener('submit', e => {
+    async handleSubmit(e) {
         e.preventDefault();
+        const formData = new FormData(this.form);
+        formData.append('quizId', this.quizId);
 
-        const formData = new FormData(e.target);
+        try {
+            const res = await fetch(`/api/quiz/update`, {
+                method: 'POST',
+                body: formData
+            });
 
-        formData.append('quizId', quizId);
-
-        fetch(`/api/quiz/update`, {
-            method: 'POST',
-            body: formData
-        })
-            .then(async res => {
-                if (!res.ok) {
-                    const errorText = await res.text();
-                    throw new Error(errorText || 'Unknown error');
-                }
-                alert('Quiz updated');
-            })
-            .catch(e => alert('Update failed: ' + e.message));
-    });
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(errorText || 'Unknown error');
+            }
+            alert('Quiz updated');
+        } catch (e) {
+            alert('Update failed: ' + e.message);
+        }
+    }
+}
