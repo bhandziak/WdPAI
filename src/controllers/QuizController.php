@@ -58,24 +58,14 @@ class QuizController extends AppController
     public function deleteQuiz()
     {
         $quizId = $_POST['quizId'] ?? null;
-
-        if (!$quizId) {
-            throw new Exception("QuizId cant be null", 400);
-        }
-
-        $quiz = $this->quizRepository->getQuizContentById($quizId);
-
-        if (!$quiz) {
-            throw new Exception("Quiz not found", 400);
-        }
-
-        // only admin or owner can delete quiz
         $userId = $_SESSION['user']->getId();
         $userRole = $_SESSION['user']->getRole();
 
-        if ($userRole !== 'admin' && $quiz->owner_id !== $userId) {
-            throw new Exception("Forbidden", 403);
+        if (!$this->quizService->canEditOrDeleteQuiz($quizId, $userId, $userRole)) {
+            throw new Exception("Only owner or admin can delete quiz", 403);
         }
+
+        $quiz = $this->quizRepository->getQuizContentById($quizId);
 
         // delete linked files
         if (!empty($quiz->album_cover_url)) {
@@ -134,8 +124,15 @@ class QuizController extends AppController
 
     #[AllowedMethods(['GET'])]
     #[AllowedRules(['user', 'admin'])]
-    public function redirectToQuizView()
+    public function redirectToEditQuizView()
     {
+        $quizId = $_GET['id'] ?? null;
+        $userId = $_SESSION['user']->getId();
+        $userRole = $_SESSION['user']->getRole();
+
+        if (!$this->quizService->canEditOrDeleteQuiz($quizId, $userId, $userRole)) {
+            throw new Exception("Only owner or admin can edit quiz", 403);
+        }
         return $this->render('makeQuiz/editQuiz');
     }
 
@@ -214,18 +211,21 @@ class QuizController extends AppController
     public function updateQuiz()
     {
         $quizId = $_POST['quizId'] ?? null;
+        $userId = $_SESSION['user']->getId();
+        $userRole = $_SESSION['user']->getRole();
 
-        if (!$quizId) {
-            http_response_code(400);
-            exit;
-        }
 
         try {
+            if (!$this->quizService->canEditOrDeleteQuiz($quizId, $userId, $userRole)) {
+                throw new Exception("Only owner or admin can edit quiz", 403);
+            }
+
             $this->quizService->updateQuizFromForm($quizId, $_POST);
         } catch (Exception $e) {
             $code = $e->getCode() ?: 500;
             http_response_code($code);
             echo $e->getMessage();
+            exit;
         }
 
         http_response_code(200);

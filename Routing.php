@@ -79,7 +79,7 @@ class Routing
         // EDIT QUIZ
         "edit_quiz" => [
             "controller" => "QuizController",
-            "action" => "redirectToQuizView"
+            "action" => "redirectToEditQuizView"
         ],
 
         // PLAY QUIZ

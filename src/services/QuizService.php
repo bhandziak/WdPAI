@@ -76,4 +76,23 @@ class QuizService
             throw $e;
         }
     }
+
+    public function canEditOrDeleteQuiz(int $quizId, int $userId, string $userRole): bool
+    {
+        if (!$quizId) {
+            throw new Exception("Id cannot be null", 400);
+        }
+
+        $quiz = $this->quizRepo->getQuizContentById($quizId);
+
+        if (!$quiz) {
+            throw new Exception("Quiz not found", 404);
+        }
+
+        if ($userRole === 'admin') {
+            return true;
+        }
+
+        return $quiz->owner_id === $userId;
+    }
 }

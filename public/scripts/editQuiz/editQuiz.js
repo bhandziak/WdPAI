@@ -93,9 +93,12 @@ document
             method: 'POST',
             body: formData
         })
-            .then(res => {
-                if (!res.ok) throw new Error();
+            .then(async res => {
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(errorText || 'Unknown error');
+                }
                 alert('Quiz updated');
             })
-            .catch(() => alert('Update failed'));
+            .catch(e => alert('Update failed: ' + e.message));
     });
